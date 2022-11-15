@@ -193,9 +193,17 @@ module.exports = {
         res.redirect('/');
     },
 
+    //view the products in productpage
 
-    productpage: (req,res) => {
-        res.render('user/productpage')
+    productpage: async(req,res) => {
+
+        if (req.session.userLogin) {
+            const products = await ProductModel.find({}).populate('type', 'categoryName').lean()
+            res.render('user/productpage',{login: true, user: req.session.user, products})
+        } else {
+
+            res.render('user/home', { login: false });
+        }
 
     }
 
