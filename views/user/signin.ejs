@@ -1,0 +1,131 @@
+<html lang="en">
+
+<head>
+	<title style="color: brown">LOGIN/SIGN UP WITH ZAUR</title>
+	<meta name="author" content="Zaur">
+	<meta descryption content="Presentation of website">
+	<meta name="keywords" content="technology, cyber security, software">
+	<meta http-equiv="refresh" content="100">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="/stylesheets/user/signin/style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+	<link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+	<div class="container forms" id="container">
+		<div class="form sign-up">
+			<form action="/send" method="post">
+				<div class="header">Sign Up</div>
+				<!-- <div class="social__media__container">
+						<a href="#" class="social codepen">
+							<i class="fa-brands fa-codepen"></i>
+						</a>
+						<a href="#" class="social google">
+							<i class="fa-brands fa-google"></i>
+						</a>
+						<a href="#" class="social instagram">
+							<i class="fa-brands fa-instagram"></i>
+						</a>
+					</div> -->
+				<span class="under__social">
+					<a href="#" class="link signin-link">Have an account
+					</a>
+				</span>
+
+				<div class="button-input-group">
+					<div class="group input-group">
+						<input type="text" placeholder="Full Name" required pattern="[A-Za-z]{3,22}"name="fullName">
+					</div>
+					<div class="group input-group">
+						<input type="text" placeholder="User Name" required pattern="[A-Za-z]{3,22}" name="userName">
+					</div>
+					<div class="group input-group">
+						<input type="tel" placeholder="Phone Number" required pattern="[789][0-9]{9}" name="phoneNumber"/>
+					</div>
+					<div class="group input-group">
+						<input type="email" placeholder="Email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="email">
+					</div>
+					<div class="group input-group">
+						<input type="password" placeholder="Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="password">
+					</div>
+					<div class="alert-text signup__alert">
+						<span class="help__text">At least 8 character</span>
+					</div>
+					<div class="group button-group">
+						<button class="signup-btn" type="submit">
+							<span>Login</span>
+						</button>
+					</div>
+				</div>
+
+			</form>
+		</div>
+
+
+		<div class="form sign-in">
+			<form action="/login" method="post">
+				<div class="header">Login</div>
+
+				<span class="under__social">
+					<a href="#" class="link signup-link">Create account</a>
+				</span>
+
+				<div class="button-input-group">
+					<div class="group input-group">
+						<input type="email" placeholder="Email" required name="email">
+					</div>
+					<div class="group input-group">
+						<input type="password" placeholder="Password" required pattern=".{8,}" name="password">
+					</div>
+					<div class="alert-text">
+						<span class="help__text"></span>
+					</div>
+					<div class="form-link forgot">
+						<a href="#" class="login-link">Forgot your password?</a>
+					</div>
+					<div class="group button-group">
+						<button class="signup-btn" type="submit">
+							<span>Login</span>
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<!--
+			<div class="overlay-wrapper">
+				<div class="overlay">
+					<div class="overlay-panel overlay__left">
+						<h1>Welcome Back!</h1>
+						<p>Please login your personal info</p>
+						
+						<div class="group button-group">
+						<button class="ghost" id="SignIn">
+							<span>Sign in</span>
+						</button>
+					</div>
+					</div>
+					
+					<div class="overlay-panel overlay__right">
+						<h1>Hello, Friend!</h1>
+            <p>Enter your personal details and start your journey with us</p>
+						
+						<div class="group button-group">
+						<button class="ghost" id="SignUp">
+							<span>Sign up</span>
+						</button>
+					</div>
+					</div>
+				</div>
+			</div>
+			-->
+
+	</div>
+
+
+	<script src="javascripts/user/signin/sample.js"></script>
+</body>
+
+</html>
