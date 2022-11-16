@@ -205,7 +205,21 @@ module.exports = {
             res.render('user/home', { login: false });
         }
 
-    }
+    },
+
+    productdetails: async(req,res) => { 
+
+
+        prodt = req.params.id;
+       
+        const products = await ProductModel.findById({_id: req.params.id}).populate('type')
+        console.log(products);
+        
+        res.render('user/productdetails',{login: true, user: req.session.user, products})
+    },
+
+
+      
 
 
 
