@@ -6,6 +6,7 @@ const UserModel = require('../models/userModel');
 
 
 
+
 module.exports = {
 
     //signin page
@@ -95,7 +96,7 @@ module.exports = {
 
     editproduct: async(req,res) => {
         let id = req.params.id
-        let product = await ProductModel.findOne({_id:id})
+        let product = await ProductModel.findOne({_id:id}).populate('type')
         let category = await CategoryModel.find()
 
         console.log(product);
@@ -116,7 +117,7 @@ module.exports = {
         if(req.file) {
             let image = req.file;
             await ProductModel.findByIdAndUpdate(
-                {_id:req.params.id}, {$set: {image: image.path}}
+                {_id:req.params.id}, {$set: {image: image.filename}}
             ); 
 
         }
@@ -183,12 +184,60 @@ module.exports = {
     },
 
     //DELETE PRODUCTS
-    deleteproducts: async (req, res) => {
-        let id = req.params.id;
-        //console.log("delete")
-        await ProductModel.findByIdAndDelete({ _id: id });
-        res.redirect("/admin/viewproducts")
+    // deleteproducts: async (req, res) => {
+    //     let id = req.params.id;
+    //     //console.log("delete")
+    //     await ProductModel.findByIdAndDelete({ _id: id });
+    //     res.redirect("/admin/viewproducts")
+    // },
+
+    
+
+
+
+//Soft Delete
+     //Product List and Unlist
+     listProduct: async (req, res) => {
+        const id = req.params.id
+        await ProductModel.findByIdAndUpdate({ _id: id }, { $set: { update: true } })
+            .then(() => {
+                res.redirect("/admin/viewproducts")
+
+            })
+
     },
+
+    unlistProduct: async (req, res) => {
+        const id = req.params.id
+        await ProductModel.findByIdAndUpdate({ _id: id }, { $set: { update: false } })
+            .then(() => {
+                res.redirect('/admin/viewproducts')
+            })
+    },
+
+    
+   
+
+
+    // deleteproducts: (id) => {
+    //     return new Promise(async (resolve,reject) => {
+    //         await ProductModel.findByIdAndUpdate({ _id: id }, { $set: { isDeleted: true } })
+    //         resolve()
+    //     })
+    // },
+
+    // deleteproduct: () => {
+    //     return new Promise(async (resolve,reject) => {
+    //         let product = await ProductModel.find({ isDeleted: true}).populate('category')
+    //         resolve(product)
+    //     })
+    // },
+
+    // restoreProduct: (id) => {
+    //     return new Promise(async (resolve, reject) => {
+    //         await ProductModel.findByIdAndUpdate({ _id: id }, { $set: {isDeleted: false}})
+    //     })
+    // }
 
 
 

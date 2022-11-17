@@ -26,10 +26,19 @@ router.post('/deletecategory/:id',controller.deletecategory)
 router.post('/blockUser/:id',controller.blockUser)
 router.post('/unblockUser/:id',controller.unblockUser)
 
-router.post('/deleteproducts/:id',controller.deleteproducts)
+
+//product listing
+
+router.post('/listProduct/:id',controller. listProduct)
+router.post('/unlistProduct/:id',controller. unlistProduct)
+
+
+
+// router.post('/deleteproducts/:id',controller.deleteproducts)
 
 router.post('/updateproduct/:id',controller.updateproduct)
 router.post('/editproduct/:id',controller.editproduct)
+
 
 
 

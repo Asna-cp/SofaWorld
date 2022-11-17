@@ -115,7 +115,7 @@
     <div class="app-sidebar__user"><img class="app-sidebar__user-avatar"
         src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg" alt="User Image">
       <div>
-        
+
       </div>
     </div>
     <ul class="app-menu">
@@ -132,9 +132,9 @@
 
           <li><a class="treeview-item" href="/admin/addproductpage"><i class="icon fa fa-circle-o"></i> Add Products</a>
           </li>
-          <li><a class="treeview-item" href="/admin/viewproducts"  rel="noopener"><i
-                class="icon fa fa-circle-o"></i> View Products</a></li>
-         
+          <li><a class="treeview-item" href="/admin/viewproducts" rel="noopener"><i class="icon fa fa-circle-o"></i>
+              View Products</a></li>
+
         </ul>
 
 
@@ -152,7 +152,7 @@
           <li><a class="treeview-item" href="form-components.html"><i class="icon fa fa-circle-o"></i> Add banner</a>
           </li>
           <li><a class="treeview-item" href="form-custom.html"><i class="icon fa fa-circle-o"></i> View banner</a></li>
-        
+
         </ul>
       </li>
       <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
@@ -169,7 +169,7 @@
             class="treeview-indicator fa fa-angle-right"></i></a>
         <ul class="treeview-menu">
           <li><a class="treeview-item" href="blank-page.html"><i class="icon fa fa-circle-o"></i> View profile</a></li>
-        
+
         </ul>
       </li>
     </ul>
@@ -189,61 +189,73 @@
       <form action="/admin/updateproduct/<%= product._id %>" method="post" enctype="multipart/form-data">
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Product Name</label>
-          <input type="text" class="form-control" id="exampleInputEmail1" value="<%= product.productName %>" name="productName">
+          <input type="text" class="form-control" id="exampleInputEmail1" value="<%= product.productName %>"
+            name="productName">
           <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>  -->
         </div>
 
         <div class="mb-3">
-         
+
           <label for="exampleInputPassword1" class="form-label">Category</label>
           <select class="group input-group form-control" name="type" id="">
-            <% for(let Categories of category){ %>
-          <option value="" selected>Select Your Sofa types</option>
-          
-            <option value="<%= Categories.categoryName %>" ><%= Categories.categoryName %></option>
-
-         <% } %>
-        </select>
+            <% category.forEach(function(x) { %>
+              <% if (x.categoryName==product.type.categoryName){ %>
+                <option selected value="<%= x._id %>">
+                  <%= x.categoryName %>
+                </option>
+              <% } else { %>
+                  <!-- <option value="" selected>Select Your Sofa types</option> -->
+                  <option value="<%= x?._id %>">
+                    <%= x?.categoryName %>
+                  </option>
+              <% } %>
+            <% }) %>
+          </select>
           <!-- <input type="number" class="form-control" id="exampleInputPassword1" name="seating"> -->
         </div>
 
-         
+
 
 
         <div class="mb-3">
           <label for="exampleInputPassword1" class="form-label">Seating</label>
-          <input type="number" class="form-control" id="exampleInputPassword1" value="<%= product.seating %>"name="seating">
+          <input type="number" class="form-control" id="exampleInputPassword1" value="<%= product.seating %>"
+            name="seating">
         </div>
 
 
         <div class="mb-3">
           <label for="exampleInputPassword1" class="form-label">Quantity</label>
-          <input type="number" class="form-control" id="exampleInputPassword1"  value="<%= product.seating %>"  name="quantity">
+          <input type="number" class="form-control" id="exampleInputPassword1" value="<%= product.seating %>"
+            name="quantity">
         </div>
 
 
         <div class="mb-3">
           <label for="exampleInputPassword1" class="form-label">Discription</label>
-          <input type="text" class="form-control" id="exampleInputPassword1"  value="<%= product.discription %>" name="discription">
+          <input type="text" class="form-control" id="exampleInputPassword1" value="<%= product.discription %>"
+            name="discription">
         </div>
 
 
         <div class="mb-3">
           <label for="exampleInputPassword1" class="form-label">Price</label>
-          <input type="number" class="form-control" id="exampleInputPassword1"  value="<%= product.price %>" name="price">
+          <input type="number" class="form-control" id="exampleInputPassword1" value="<%= product.price %>"
+            name="price">
         </div>
-         <div>
-          <img style="width: 80px; height: 80px;" src="<%= product.image %>" alt="">
-         </div>
+        <div>
+          <img style="width: 80px; height: 80px;" src="/images/<%= product.image %>" alt="">
+        </div>
         <div class="mb-3">
           <label for="exampleInputPassword1" class="form-label">Image</label>
-          <input type="file" class="form-control" id="exampleInputPassword1"  value="<%= product.image %>" name="image">
+          <input type="file" class="form-control" id="exampleInputPassword1" value="<%= product.image %>" name="image">
         </div>
 
 
         <div class="mb-3">
           <label for="exampleInputPassword1" class="form-label">Status</label>
-          <input type="text" class="form-control" id="exampleInputPassword1"  value="<%= product.status %>" name="status">
+          <input type="text" class="form-control" id="exampleInputPassword1" value="<%= product.status %>"
+            name="status">
         </div>
         <div class="mb-3 form-check">
           <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -254,12 +266,12 @@
     </div>
     <div>
       <form>
-      
+
     </div>
-  
+
     </form>
     </div>
-   
+
     </div>
   </main>
 

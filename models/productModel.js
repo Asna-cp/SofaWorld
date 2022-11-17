@@ -34,7 +34,15 @@ const productSchema = new mongoose.Schema({
     status: {
         type : String,
         required : true
-    },
+    }, 
+     update: {
+        type : Boolean,
+        default : true
+    }
+    // isDeleted:{
+    //     type:Boolean,
+    //     default:false
+    // }
     
 
 })

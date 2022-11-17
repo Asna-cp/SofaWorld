@@ -12,6 +12,7 @@ router.get('/loginpage',controller.signin)
 router.get('/logout', controller.logout)
 router.get('/productpage',controller.productpage)
 router.get('/productdetails/:id',controller.productdetails)
+router.get('/addtowishlist/:productId',controller.addtowishlist)
 
 
 //Email otp verification
@@ -29,6 +30,7 @@ router.post('/home',controller.home)
 router.post('/send',controller.otp)
 
 router.post('/verify', controller.verifyotp)
+
 
 
 module.exports = router

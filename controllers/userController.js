@@ -2,6 +2,7 @@ const UserModel = require('../models/userModel');
 
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
+const wishlistModel = require('../models/wishlistModel')
 
 
 
@@ -181,7 +182,8 @@ module.exports = {
         if (!isMatch) {
             return res.redirect('/loginpage');
         }
-        req.session.user = user.userName
+        req.session.user = user.userName;
+        req.session.userId = user._id;
         req.session.userLogin = true;
         res.render('user/home', { login: true, user: user.userName });
 
@@ -218,6 +220,25 @@ module.exports = {
         res.render('user/productdetails',{login: true, user: req.session.user, products})
     },
 
+    //Add to Wishlist
+
+    addtowishlist: async (req,res) => {
+        let productId = req.params.productId
+        let userId = req.session.userId  //user id
+        let wishlist = await wishlistModel.findOne({ userId })
+
+        if (wishlist) {
+            await wishlistModel.findOneAndUpdate({ userId: userId }, {$addToSet: {productIds: productId } })
+            res.redirect('/productpage')
+        }
+        else {
+            const newwishlist = new wishlistModel({ userId,productIds: [productId] })
+            newwishlist.save()
+            .then(() => {
+                res.redirect('/productpage')
+            })
+        }
+    },
 
       
 

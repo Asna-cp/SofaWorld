@@ -240,8 +240,9 @@
                     <%= product?.price %>
                   </td>
                   <td><img src="/images/<%= product?.image %>" alt="" style="height: 50px; width: 60px;"></td>
-
+<!-- 
                   <td><div style="display: flex;">
+
                     <form action="/admin/editproduct/<%= product?._id %>" method="post">
                       <button type="submit" class="btn btn-primary"   style="width: 100px;">edit</button>
                     </form>
@@ -249,14 +250,34 @@
                     <form action="/admin/deleteproducts/<%= product._id %>" method="post">
                       <button type="submit" class="btn btn-danger" style="width: 100px;"
                         onclick="return confirm('Are you sure you want to delete?')">Delete</button>
+                    </form> -->
+                    <td>
+                      <div>
+                    <% if (product?.update==false) { %> 
+                      <form action="/admin/listProduct/<%= product?._id %>" method="post">
+                          <button type="submit" class="btn btn-danger" style="width: 100px;">List</button>
+                      </form>
+                      <% } else { %>
+                          <form action="/admin/unlistProduct/<%= product._id %>" method="post">
+                              <button type="submit" class="btn btn-success" style="width: 100px;">UnList</button>
+                          </form>
+
+                  
+                          <% } %>
+
+                       <br>       
+                    <form action="/admin/editproduct/<%= product?._id %>" method="post">
+                      <button type="submit" class="btn btn-primary"   style="width: 100px;">edit</button>
                     </form>
 
+                         
                   </div>
                     
                   </td>
 
                 </tr>
                 <% }) %>
+
             </tbody>
           </table>
         </div>
