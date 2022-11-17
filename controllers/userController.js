@@ -49,10 +49,11 @@ module.exports = {
 
         //res.send("you just created  a user ")
         if (req.session.userLogin) {
-            res.render("user/home", { login: true, user: req.session.user })
+            const userId = req.session.userId
+            res.render("user/home", { login: true, user: req.session.user, userId })
         } else {
 
-            res.render('user/home', { login: false });
+            res.render('user/home', { login: false, user: "", userId: "" });
         }
     },
 
@@ -92,31 +93,31 @@ module.exports = {
                 res.render('user/email');
             });
         }
-        else{
+        else {
             res.redirect('/loginpage')
         }
     },
 
-    resendotp: (req, res ) => {
-        var mailOptions={
+    resendotp: (req, res) => {
+        var mailOptions = {
             to: email,
-           subject: "Otp for registration is: ",
-           html: "<h3>OTP for account verification is </h3>"  + "<h1 style='font-weight:bold;'>" + otp +"</h1>" // html body
-         };
-         
-         transporter.sendMail(mailOptions, (error, info) => {
+            subject: "Otp for registration is: ",
+            html: "<h3>OTP for account verification is </h3>" + "<h1 style='font-weight:bold;'>" + otp + "</h1>" // html body
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 return console.log(error);
             }
-            console.log('Message sent: %s', info.messageId);   
+            console.log('Message sent: %s', info.messageId);
             console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-            res.render('otp',{msg:"otp has been sent"});
+            res.render('otp', { msg: "otp has been sent" });
         });
     },
 
 
-    verifyotp: (req,res) => {
-        if(req.body.otp==otp){
+    verifyotp: (req, res) => {
+        if (req.body.otp == otp) {
             const newUser = UserModel({
                 fullName: FullName,
                 userName: UserName,
@@ -141,10 +142,10 @@ module.exports = {
                         })
                 })
             })
-           
+
         }
-        else{
-            res.render('otp',{msg : 'otp is incorrect'});
+        else {
+            res.render('otp', { msg: 'otp is incorrect' });
         }
     },
 
@@ -185,7 +186,8 @@ module.exports = {
         req.session.user = user.userName;
         req.session.userId = user._id;
         req.session.userLogin = true;
-        res.render('user/home', { login: true, user: user.userName });
+        const userId = req.session.userId
+        res.render('user/home', { login: true, user: user.userName, userId });
 
     },
 
@@ -197,11 +199,11 @@ module.exports = {
 
     //view the products in productpage
 
-    productpage: async(req,res) => {
+    productpage: async (req, res) => {
 
         if (req.session.userLogin) {
             const products = await ProductModel.find({}).populate('type', 'categoryName').lean()
-            res.render('user/productpage',{login: true, user: req.session.user, products})
+            res.render('user/productpage', { login: true, user: req.session.user, products })
         } else {
 
             res.render('user/home', { login: false });
@@ -209,38 +211,49 @@ module.exports = {
 
     },
 
-    productdetails: async(req,res) => { 
+    productdetails: async (req, res) => {
 
 
         prodt = req.params.id;
-       
-        const products = await ProductModel.findById({_id: req.params.id}).populate('type')
+
+        const products = await ProductModel.findById({ _id: req.params.id }).populate('type')
         console.log(products);
-        
-        res.render('user/productdetails',{login: true, user: req.session.user, products})
+
+        res.render('user/productdetails', { login: true, user: req.session.user, products })
+    },
+
+    wishListPage: async (req, res) => {
+        console.log(req.params.id);
+        let products
+        const wishlist = await wishlistModel.findOne({ userId: req.params.id }).populate('productIds')
+        if (wishlist) {
+            products = wishlist.productIds
+        } else {
+            products = null;
+        }
+        res.render('user/wishlist', { login: true, user: req.session.user, products })
     },
 
     //Add to Wishlist
 
-    addtowishlist: async (req,res) => {
+    addtowishlist: async (req, res) => {
         let productId = req.params.productId
         let userId = req.session.userId  //user id
         let wishlist = await wishlistModel.findOne({ userId })
-
         if (wishlist) {
-            await wishlistModel.findOneAndUpdate({ userId: userId }, {$addToSet: {productIds: productId } })
+            await wishlistModel.findOneAndUpdate({ userId: userId }, { $addToSet: { productIds: productId } })
             res.redirect('/productpage')
         }
         else {
-            const newwishlist = new wishlistModel({ userId,productIds: [productId] })
+            const newwishlist = new wishlistModel({ userId, productIds: [productId] })
             newwishlist.save()
-            .then(() => {
-                res.redirect('/productpage')
-            })
+                .then(() => {
+                    res.redirect('/productpage')
+                })
         }
     },
 
-      
+
 
 
 

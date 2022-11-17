@@ -52,7 +52,6 @@ app.use(session({
 
 //cache control
 app.use((req, res, next) => {
-    console.log('cache success');
     res.set("cache-control", "private,no-store,must-revalidate");
     next();
 })
