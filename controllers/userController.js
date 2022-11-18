@@ -52,8 +52,8 @@ module.exports = {
             const userId = req.session.userId
             res.render("user/home", { login: true, user: req.session.user, userId })
         } else {
-
-            res.render('user/home', { login: false, user: "", userId: "" });
+            const userId = req.session.userId
+            res.render('user/home', { login: false, user: "", userId });
         }
     },
 
@@ -197,13 +197,25 @@ module.exports = {
         res.redirect('/');
     },
 
+    //Session middleWare
+
+    userSession: (req, res, next) => {
+        if (req.session.userLogin) {
+            next()
+        } else {
+            res.redirect('/loginpage')
+        }
+    },
+
     //view the products in productpage
 
     productpage: async (req, res) => {
 
         if (req.session.userLogin) {
             const products = await ProductModel.find({}).populate('type', 'categoryName').lean()
-            res.render('user/productpage', { login: true, user: req.session.user, products })
+            const userId = req.session.id
+
+            res.render('user/productpage', { login: true, user: req.session.user, products, userId })
         } else {
 
             res.render('user/home', { login: false });
@@ -215,23 +227,24 @@ module.exports = {
 
 
         prodt = req.params.id;
-
+        const userId = req.session.id
         const products = await ProductModel.findById({ _id: req.params.id }).populate('type')
         console.log(products);
 
-        res.render('user/productdetails', { login: true, user: req.session.user, products })
+        res.render('user/productdetails', { login: true, user: req.session.user, products, userId })
     },
 
     wishListPage: async (req, res) => {
         console.log(req.params.id);
         let products
+        const userId = req.session.id
         const wishlist = await wishlistModel.findOne({ userId: req.params.id }).populate('productIds')
         if (wishlist) {
             products = wishlist.productIds
         } else {
             products = null;
         }
-        res.render('user/wishlist', { login: true, user: req.session.user, products })
+        res.render('user/wishlist', { login: true, user: req.session.user, products, userId })
     },
 
     //Add to Wishlist
@@ -252,6 +265,18 @@ module.exports = {
                 })
         }
     },
+
+
+    removewishlistproduct: async (req, res) => {
+        const id = req.params.id;
+        let userId = req.session.userId;
+        await wishlistModel.findOneAndUpdate({ userId }, { $pull: { productIds: id } })
+            .then(() => {
+                res.redirect("/productpage")
+            })
+    }
+
+
 
 
 

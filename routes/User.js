@@ -10,10 +10,12 @@ const controller = require('../controllers/userController')
 router.get('/', controller.home)
 router.get('/loginpage',controller.signin)
 router.get('/logout', controller.logout)
-router.get('/productpage',controller.productpage)
-router.get('/productdetails/:id',controller.productdetails)
-router.get('/addtowishlist/:productId',controller.addtowishlist)
-router.get('/wishListPage/:id', controller.wishListPage)
+router.get('/productpage',controller.userSession,controller.productpage)
+router.get('/productdetails/:id',controller. userSession,controller.productdetails)
+router.get('/addtowishlist/:productId',controller. userSession,controller.addtowishlist)
+router.get('/wishListPage/:id',controller.userSession,controller.wishListPage)
+
+router.post('/removewishlistproduct/:id',controller. userSession,controller.removewishlistproduct)
 
 
 
