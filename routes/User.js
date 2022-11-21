@@ -12,10 +12,18 @@ router.get('/loginpage',controller.signin)
 router.get('/logout', controller.logout)
 router.get('/productpage',controller.userSession,controller.productpage)
 router.get('/productdetails/:id',controller. userSession,controller.productdetails)
-router.get('/addtowishlist/:productId',controller. userSession,controller.addtowishlist)
-router.get('/wishListPage/:id',controller.userSession,controller.wishListPage)
 
+//wishlist
+router.get('/addtowishlist/:productId',controller. userSession,controller.addtowishlist)
+router.get('/wishListPage',controller.userSession,controller.wishListPage)
 router.post('/removewishlistproduct/:id',controller. userSession,controller.removewishlistproduct)
+
+//CART
+//router.get('/cart',controller.cart)
+router.get('/addtocart/:id',controller.addtocart)
+router.post('/removecartproduct/:id',controller.removecartproduct)
+
+router.get('/cart',controller.cart)
 
 
 

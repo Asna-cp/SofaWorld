@@ -1,8 +1,9 @@
 const UserModel = require('../models/userModel');
-
+const productModel = require('./../models/productModel')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
-const wishlistModel = require('../models/wishlistModel')
+const wishlistModel = require('../models/wishlistModel');
+const cartModel = require('../models/cartModel');
 
 
 
@@ -229,22 +230,34 @@ module.exports = {
         prodt = req.params.id;
         const userId = req.session.id
         const products = await ProductModel.findById({ _id: req.params.id }).populate('type')
-        console.log(products);
+        // console.log(products);
 
         res.render('user/productdetails', { login: true, user: req.session.user, products, userId })
     },
 
     wishListPage: async (req, res) => {
-        console.log(req.params.id);
-        let products
-        const userId = req.session.id
-        const wishlist = await wishlistModel.findOne({ userId: req.params.id }).populate('productIds')
-        if (wishlist) {
-            products = wishlist.productIds
-        } else {
-            products = null;
-        }
-        res.render('user/wishlist', { login: true, user: req.session.user, products, userId })
+        // let products
+        // const userId = req.session.id
+        // const wishlist = await wishlistModel.findOne({ userId : userId }).populate('productIds')
+        // console.log(userId)
+        // console.log(wishlist)
+        // if (wishlist) {
+        //     products = wishlist.productIds
+        //     res.render('user/wishlist', { login: true, user: req.session.user,wishlist })
+        // } 
+        const userId = req.session.userId;
+        return new Promise(async (resolve, reject) => {
+            let list = await wishlistModel.findOne({ userId: userId }).populate('productIds')
+            if (list != null) {
+                list = list.productIds
+            }
+            else {
+                list = []
+            }
+            resolve(list)
+        }).then((list) => {
+            res.render('user/wishlist', { login: true, user: req.session.user, list })
+        })
     },
 
     //Add to Wishlist
@@ -272,9 +285,55 @@ module.exports = {
         let userId = req.session.userId;
         await wishlistModel.findOneAndUpdate({ userId }, { $pull: { productIds: id } })
             .then(() => {
-                res.redirect("/productpage")
+                res.redirect("/wishListPage")
             })
-    }
+    },
+
+    // Cart products
+
+    cart: async (req, res) => {
+
+        const userId = req.session.userId;
+        return new Promise(async (resolve, reject) => {
+            let list = await cartModel.findOne({ userId: userId }).populate('productIds')
+            if (list != null) {
+                list = list.productIds
+            }
+            else {
+                list = []
+            }
+            resolve(list)
+        }).then((list) => {
+            res.render('user/cart', { login: true, user: req.session.user, list })
+        })
+    },
+
+    addtocart: async (req, res) => {
+        let productId = req.params.id
+        let userId = req.session.userId
+        let cart = await cartModel.findOne({ userId })
+        if (cart) {
+            await cartModel.findOneAndUpdate({ userId },  {$push: { productIds:{ productId }} })
+            res.redirect('/productpage')
+        }
+        else {
+            const newcart = new cartModel({ userId, productIds: [{ productId }] })
+            newcart.save()
+                .then(() => {
+                    res.redirect('/productpage')
+                })
+        }
+    },
+
+    removecartproduct: async (req, res) => {
+        const id = req.params.id;
+        let userId = req.session.userId;
+        await cartModel.findOneAndUpdate({ userId }, { $pull: { productIds: id } })
+            .then(() => {
+                res.redirect("/cart")
+            })
+    },
+
 
 
 
