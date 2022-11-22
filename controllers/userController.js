@@ -294,18 +294,28 @@ module.exports = {
     cart: async (req, res) => {
 
         const userId = req.session.userId;
-        return new Promise(async (resolve, reject) => {
-            let list = await cartModel.findOne({ userId: userId }).populate('productIds')
-            if (list != null) {
-                list = list.productIds
+        // return new Promise(async (resolve, reject) => {
+        //     let list = await cartModel.findOne({ userId: userId }).populate('productIds')
+        //     if (list != null) {
+        //         list = list.productIds
+        //     }
+        //     else {
+        //         list = []
+        //     }
+        //     resolve(list)
+        // }).then((list) => {
+        //     res.render('user/cart', { login: true, user: req.session.user, list })
+        // })
+        const cartlist = await cartModel.findOne({userId}).populate("productIds.productId");
+        const cart = cartlist.productIds
+        console.log(cart);
+        if(cartlist != null){
+            if(req.session.userLogin) {
+                res.render('user/cart', {login: true, user: req.session.user, cart, cartlist})
             }
-            else {
-                list = []
-            }
-            resolve(list)
-        }).then((list) => {
-            res.render('user/cart', { login: true, user: req.session.user, list })
-        })
+        } else {
+            res.render('user/cart', {login : false })
+        }
     },
 
     addtocart: async (req, res) => {
@@ -328,7 +338,7 @@ module.exports = {
     removecartproduct: async (req, res) => {
         const id = req.params.id;
         let userId = req.session.userId;
-        await cartModel.findOneAndUpdate({ userId }, { $pull: { productIds: id } })
+        await cartModel.findOneAndUpdate({ userId }, { $pull: { productId: id } })
             .then(() => {
                 res.redirect("/cart")
             })

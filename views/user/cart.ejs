@@ -3,7 +3,9 @@
 
 <%-include('../user/layout/userheader.ejs') -%>
 
-  <!--================Home Banner Area =================-->
+  
+
+   <!--================Home Banner Area =================-->
   <!-- breadcrumb start-->
   <section class="breadcrumb breadcrumb_bg">
     <div class="container">
@@ -33,25 +35,28 @@
                 <th scope="col">Price</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Total</th>
+                <th scope="col">Update</th>
               </tr>
             </thead>
             <tbody>
-              <% list.forEach(function(product){ %>
+              <% cart.forEach(function(product){ %>
+              
               <tr>
                 <td>
                   <div class="media">
                     <div class="d-flex">
-                      <img src="/images/<%= product?.image %>" style="width: 200px; height: 200px;" alt="" />
+                      <img src="/images/<%= product?.productId.image %>" style="width: 200px; height: 200px;" alt="" />
                     </div>
                     <div class="media-body">
-                      <p><%= product?.productName %></p>
+                      <p><%= product.productId?.productName %></p>
                     </div>
                   </div>
                 </td>
                 <td>
-                  <h5><%= product?.price %></h5>
+                  <h5><%= product.productId?.price %></h5>
                 </td>
                 <td>
+                   
                   <div class="product_count">
                     <span class="input-number-decrement"> <i class="ti-angle-down"></i></span>
                     <input class="input-number" type="text" value="1" min="0" max="10">
@@ -59,77 +64,19 @@
                   </div>
                 </td>
                 <td>
-                  <h5><%= product?.quantity %></h5>
+                  <h5><%= product.productId?.total %></h5>
+                
                 </td>
+              <td>  <form action="/removecartproduct/<%= product?._id %>" method="post">
+                  
+                <button type="submit"  class="btn btn-outline-dark" >Remove</button>
+             </form></td>
+
               </tr>
-              <tr>
-                <td>
-                  <div class="media">
-                    <div class="d-flex">
-                      <img src="/images/<%= product?.image %>"  alt="" />
-                    </div>
-                    <div class="media-body">
-                      <p><%= product?.total %></p>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <h5><%= product?.cartTotal %></h5>
-                </td>
-                <!-- <td>
-                  <div class="product_count"> -->
-                    <!-- <input type="text" value="1" min="0" max="10" title="Quantity:"
-                      class="input-text qty input-number" />
-                    <button
-                      class="increase input-number-increment items-count" type="button">
-                      <i class="ti-angle-up"></i>
-                    </button>
-                    <button
-                      class="reduced input-number-decrement items-count" type="button">
-                      <i class="ti-angle-down"></i>
-                    </button> -->
-                    <!-- <span class="input-number-decrement"> <i class="ti-angle-down"></i></span>
-                    <input class="input-number" type="text" value="1" min="0" max="10">
-                    <span class="input-number-increment"> <i class="ti-angle-up"></i></span>
-                  </div>
-                </td>
-                <td>
-                  <h5>$720.00</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="media">
-                    <div class="d-flex">
-                      <img src="img/product/single-product/cart-1.jpg" alt="" />
-                    </div>
-                    <div class="media-body">
-                      <p>Minimalistic shop for multipurpose use</p>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <h5>$360.00</h5>
-                </td>
-                <td>
-                  <div class="product_count">
-                    <span class="input-number-decrement"> <i class="ti-angle-down"></i></span>
-                    <input class="input-number" type="text" value="1" min="0" max="10">
-                    <span class="input-number-increment"> <i class="ti-angle-up"></i></span>
-                  </div>
-                </td>
-                <td>
-                  <h5>$720.00</h5>
-                </td>
-              </tr> -->
+             
+              <% }) %>
               <tr class="bottom_button">
                 <td>
-                  <!-- <form action="/removecartproduct/<%= product?._id %>" method="post">
-                  
-                    <button type="submit"  class="btn btn-outline-dark" >Remove</button>
-                 </form> -->
-                 <% }) %>
-                   
                   <a class="btn_1" href="#">Update Cart</a>
                 </td>
                 <td></td>
@@ -150,51 +97,11 @@
                   <h5>$2160.00</h5>
                 </td>
               </tr>
-              <tr class="shipping_area">
-                <td></td>
-                <td></td>
-                <td>
-                  <h5>Shipping</h5>
-                </td>
-                <td>
-                  <div class="shipping_box">
-                    <ul class="list">
-                      <li>
-                        <a href="#">Flat Rate: $5.00</a>
-                      </li>
-                      <li>
-                        <a href="#">Free Shipping</a>
-                      </li>
-                      <li>
-                        <a href="#">Flat Rate: $10.00</a>
-                      </li>
-                      <li class="active">
-                        <a href="#">Local Delivery: $2.00</a>
-                      </li>
-                    </ul>
-                    <h6>
-                      Calculate Shipping
-                      <i class="fa fa-caret-down" aria-hidden="true"></i>
-                    </h6>
-                    <select class="shipping_select">
-                      <option value="1">Bangladesh</option>
-                      <option value="2">India</option>
-                      <option value="4">Pakistan</option>
-                    </select>
-                    <select class="shipping_select section_bg">
-                      <option value="1">Select a State</option>
-                      <option value="2">Select a State</option>
-                      <option value="4">Select a State</option>
-                    </select>
-                    <input type="text" placeholder="Postcode/Zipcode" />
-                    <a class="btn_1" href="#">Update Details</a>
-                  </div>
-                </td>
-              </tr>
+            
             </tbody>
           </table>
           <div class="checkout_btn_inner float-right">
-            <a class="btn_1" href="productpage">Continue Shopping</a>
+            <a class="btn_1" href="/productpage">Continue Shopping</a>
             <a class="btn_1 checkout_btn_1" href="#">Proceed to checkout</a>
           </div>
         </div>
@@ -202,4 +109,42 @@
   </section>
   <!--================End Cart Area =================-->
 
+
   <%-include('../user/layout/userfooter.ejs') -%>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
