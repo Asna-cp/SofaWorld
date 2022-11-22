@@ -51,6 +51,7 @@ module.exports = {
         //res.send("you just created  a user ")
         if (req.session.userLogin) {
             const userId = req.session.userId
+            
             res.render("user/home", { login: true, user: req.session.user, userId })
         } else {
             const userId = req.session.userId

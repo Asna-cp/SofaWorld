@@ -11,6 +11,7 @@ router.get('/', controller.home)
 router.get('/loginpage',controller.signin)
 router.get('/logout', controller.logout)
 router.get('/productpage',controller.userSession,controller.productpage)
+
 router.get('/productdetails/:id',controller. userSession,controller.productdetails)
 
 //wishlist

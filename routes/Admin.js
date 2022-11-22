@@ -12,6 +12,10 @@ router.get('/viewproducts',controller.viewproducts)
 router.get('/category',controller.category)
 router.get('/alluser',controller.alluser)
 
+router.get('/bannerpage',controller.addBannerpage)
+
+router.get('/viewbannerpage',controller.viewBannerPage)
+
 
 
 //post method
@@ -25,6 +29,10 @@ router.post('/deletecategory/:id',controller.deletecategory)
 
 router.post('/blockUser/:id',controller.blockUser)
 router.post('/unblockUser/:id',controller.unblockUser)
+
+router.post('/addbanner',controller.addBanner)
+
+
 
 
 //product listing

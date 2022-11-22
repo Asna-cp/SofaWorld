@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const CategoryModel = require('../models/categoryModel');
 const ProductModel = require('../models/productModel');
 const UserModel = require('../models/userModel');
+const bannerModel = require('../models/bannerModel');
 
 
 
@@ -213,6 +214,45 @@ module.exports = {
             .then(() => {
                 res.redirect('/admin/viewproducts')
             })
+    },
+
+
+    //Add Banners
+
+    addBannerpage: async (req,res) => {
+      
+        res.render('admin/addbanner')
+    },
+
+    viewBannerPage: async (req,res) => {
+        const banners = await bannerModel.find({})
+        console.log(banners)
+        res.render('admin/viewbannerpage', { banners,index:1 })
+    },
+
+    addBanner: async (req,res) => {
+        const { bannerName, discription } = req.body
+
+        const image = req.file;
+        console.log(image);
+
+        const newBanner = bannerModel({
+            bannerName,
+            discription,
+            image: image.filename,
+        });
+        console.log(newBanner);
+
+        await newBanner
+        .save()
+        .then(() => {
+            res.redirect("/admin/viewbannerpage");
+        })
+        .catch((err) => {
+            console.log(err.message);
+            res.redirect("/admin/bannerpage")
+        })
+        
     },
 
     
