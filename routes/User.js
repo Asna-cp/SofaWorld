@@ -13,6 +13,7 @@ router.get('/logout', controller.logout)
 router.get('/productpage',controller.userSession,controller.productpage)
 
 router.get('/productdetails/:id',controller. userSession,controller.productdetails)
+router.get('/category/:id',controller. categorylisting)
 
 //wishlist
 router.get('/addtowishlist/:productId',controller. userSession,controller.addtowishlist)

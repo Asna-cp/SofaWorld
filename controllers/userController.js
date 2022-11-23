@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const wishlistModel = require('../models/wishlistModel');
 const cartModel = require('../models/cartModel');
-
+const categoryModel = require('../models/categoryModel')
 
 
 //Email otp
@@ -52,12 +52,14 @@ module.exports = {
         if (req.session.userLogin) {
             const userId = req.session.userId
 
-            const type = productModel.find({}).populate('type')
-            
-            res.render("user/home", { login: true, user: req.session.user, banners, userId })
+            const type = await categoryModel.find()
+
+            res.render("user/home", { login: true, user: req.session.user, banners, type, userId })
         } else {
             const userId = req.session.userId
-            res.render('user/home', { login: false, banners, user: "", userId });
+            const type = await categoryModel.find()
+
+            res.render('user/home', { login: false, banners, user: "", type, userId });
         }
     },
 
@@ -191,7 +193,10 @@ module.exports = {
         req.session.userId = user._id;
         req.session.userLogin = true;
         const userId = req.session.userId
-        res.render('user/home', { login: true, user: user.userName, userId });
+        const banners = await bannerModel.find({})
+        const type = await categoryModel.find()
+
+        res.render('user/home', { login: true, user: user.userName, type, banners, userId });
 
     },
 
@@ -216,7 +221,7 @@ module.exports = {
     productpage: async (req, res) => {
 
         if (req.session.userLogin) {
-            const products = await ProductModel.find({}).populate('type', 'categoryName').lean()
+            const products = await productModel.find({}).populate('type', 'categoryName').lean()
             const userId = req.session.id
 
             res.render('user/productpage', { login: true, user: req.session.user, products, userId })
@@ -232,7 +237,7 @@ module.exports = {
 
         prodt = req.params.id;
         const userId = req.session.id
-        const products = await ProductModel.findById({ _id: req.params.id }).populate('type')
+        const products = await productModel.findById({ _id: req.params.id }).populate('type')
         // console.log(products);
 
         res.render('user/productdetails', { login: true, user: req.session.user, products, userId })
@@ -309,15 +314,15 @@ module.exports = {
         // }).then((list) => {
         //     res.render('user/cart', { login: true, user: req.session.user, list })
         // })
-        const cartlist = await cartModel.findOne({userId}).populate("productIds.productId");
+        const cartlist = await cartModel.findOne({ userId }).populate("productIds.productId");
         const cart = cartlist.productIds
         console.log(cart);
-        if(cartlist != null){
-            if(req.session.userLogin) {
-                res.render('user/cart', {login: true, user: req.session.user, cart, cartlist})
+        if (cartlist != null) {
+            if (req.session.userLogin) {
+                res.render('user/cart', { login: true, user: req.session.user, cart, cartlist })
             }
         } else {
-            res.render('user/cart', {login : false })
+            res.render('user/cart', { login: false })
         }
     },
 
@@ -326,7 +331,7 @@ module.exports = {
         let userId = req.session.userId
         let cart = await cartModel.findOne({ userId })
         if (cart) {
-            await cartModel.findOneAndUpdate({ userId },  {$push: { productIds:{ productId }} })
+            await cartModel.findOneAndUpdate({ userId }, { $push: { productIds: { productId } } })
             res.redirect('/productpage')
         }
         else {
@@ -347,9 +352,18 @@ module.exports = {
             })
     },
 
+    categorylisting: async (req, res) => {
+
+        const id = req.params.id
+        
 
 
 
+        const products = await productModel.find({ type : id }).populate('type', 'categoryName')
+        const userId = req.session.id
+
+        res.render('user/category', { login: true, user: req.session.user, products, userId })
+    },
 
 
 
