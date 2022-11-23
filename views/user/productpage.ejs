@@ -1,4 +1,4 @@
-<%-include('../user/layout/userheader.ejs') -%>
+<%-include('.. /user/layout/userheader.ejs') -%>
 
     <!--================Home Banner Area =================-->
     <!-- breadcrumb start-->
@@ -191,16 +191,19 @@
                     </div> -->
 
                     <div class="row align-items-center latest_product_inner">
-                       
-                            <% products.forEach(function(product){ %>
-                                <% if(product.update==true){%>
+
+                        <% products.forEach(function(product){ %>
+                            <% if(product.update==true){%>
                                 <% console.log(product) %>
                                     <div class="col-lg-4 col-sm-6">
                                         <div class="single_product_item">
                                             <div class="row d-flex" style="justify-content: right;">
-                                                <a href="/addtowishlist/<%= product?._id %>" style="margin-right: 5rem; margin-top: 2rem;"><i class="ti-heart" style="color: red;"></i></a>
+                                                <a href="/addtowishlist/<%= product?._id %>"
+                                                    style="margin-right: 5rem; margin-top: 2rem;"><i class="ti-heart"
+                                                        style="color: red;"></i></a>
                                             </div>
-                                            <img src="/images/<%= product?.image %>" style="width: 200px; height: 200px;" alt="">
+                                            <img src="/images/<%= product?.image %>"
+                                                style="width: 200px; height: 200px;" alt="">
                                             <div class="single_product_text">
                                                 <h4>
                                                     <%= product?.productName %>
@@ -208,7 +211,8 @@
                                                 <h3>
                                                     <%= product?.price %>
                                                 </h3>
-                                                <a href="/addtocart/<%= product?._id %>" class="add_cart">+ add to cart</a>
+                                                <a href="/addtocart/<%= product?._id %>" class="add_cart">+ add to
+                                                    cart</a>
                                                 <a href="/productdetails/<%= product?._id %>" class="add_cart"> +Product
                                                     Details</a>
 
@@ -218,8 +222,8 @@
                                         </div>
                                     </div>
                                     <%}%>
-                                    <% }) %>
-                                       
+                                        <% }) %>
+
                                             <!-- <div class="col-lg-4 col-sm-6">
                             <div class="single_product_item">
                                 <img src="img/product/product_2.png" alt="">
@@ -329,12 +333,12 @@
                                                         </ul>
                                                     </nav>
                                                 </div>
+                                             </div>
                                             </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
     <!--================End Category Product Area =================-->
 
     <!-- product_list part start-->
@@ -392,4 +396,4 @@
     </section> -->
     <!-- product_list part end-->
 
-    <%-include('../user/layout/userfooter.ejs') -%>
+    <%-include('.. /user/layout/userfooter.ejs') -%>

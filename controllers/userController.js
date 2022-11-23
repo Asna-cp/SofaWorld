@@ -46,16 +46,18 @@ module.exports = {
 
 
     // HOME PAGE
-    home: (req, res) => {
-
+    home: async (req, res) => {
+        const banners = await bannerModel.find({})
         //res.send("you just created  a user ")
         if (req.session.userLogin) {
             const userId = req.session.userId
+
+            const type = productModel.find({}).populate('type')
             
-            res.render("user/home", { login: true, user: req.session.user, userId })
+            res.render("user/home", { login: true, user: req.session.user, banners, userId })
         } else {
             const userId = req.session.userId
-            res.render('user/home', { login: false, user: "", userId });
+            res.render('user/home', { login: false, banners, user: "", userId });
         }
     },
 
