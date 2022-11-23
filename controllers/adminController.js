@@ -44,8 +44,13 @@ module.exports = {
     },
 
     viewproducts: async (req, res) => {
-        const products = await ProductModel.find({}).populate('type', 'categoryName').lean()
-        res.render('admin/viewproducts', { products, index: 1 })
+
+        const page = parseInt(req.query.page) || 1;
+        const items_per_page = 5;
+        const totalproducts = await ProductModel.find().countDocuments()
+        console.log(totalproducts);
+        const products = await ProductModel.find({}).populate('type', 'categoryName').sort({ date: -1}).skip((page - 1) * items_per_page).limit(items_per_page)
+        res.render('admin/viewproducts', { products, index: 1, page,hasNextPage: items_per_page * page < totalproducts,hasPreviousPage: page > 1,PreviousPage: page - 1 })
     },
 
 
@@ -253,6 +258,27 @@ module.exports = {
             res.redirect("/admin/bannerpage")
         })
         
+    },
+
+
+    //Soft Delete
+     //Banner List and Unlist
+     listBanner: async (req, res) => {
+        const id = req.params.id
+        await bannerModel.findByIdAndUpdate({ _id: id }, { $set: { update: true } })
+            .then(() => {
+                res.redirect("/admin/viewbannerpage")
+
+            })
+
+    },
+
+    unlistBanner: async (req, res) => {
+        const id = req.params.id
+        await bannerModel.findByIdAndUpdate({ _id: id }, { $set: { update: false } })
+            .then(() => {
+                res.redirect('/admin/viewbannerpage')
+            })
     },
 
     

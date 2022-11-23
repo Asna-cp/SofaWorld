@@ -40,6 +40,9 @@ router.post('/addbanner',controller.addBanner)
 router.post('/listProduct/:id',controller. listProduct)
 router.post('/unlistProduct/:id',controller. unlistProduct)
 
+//Banner list&unlisting
+router.post('/listBanner/:id',controller. listBanner)
+router.post('/unlistBanner/:id',controller. unlistBanner)
 
 
 // router.post('/deleteproducts/:id',controller.deleteproducts)

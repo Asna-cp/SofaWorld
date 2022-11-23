@@ -236,7 +236,7 @@
                       <%= index++ %>
                     </th>
                     <td>
-                      <%= product?.productName %>
+                      <%= product?.bannerName %>
                     </td>
                     
                     <td>
@@ -258,11 +258,11 @@
                     <td>
                       <div>
                         <% if (product?.update==false) { %>
-                          <form action="/admin/listProduct/<%= product?._id %>" method="post">
+                          <form action="/admin/listBanner/<%= product?._id %>" method="post">
                             <button type="submit" class="btn btn-danger" style="width: 100px;">List</button>
                           </form>
                           <% } else { %>
-                            <form action="/admin/unlistProduct/<%= product._id %>" method="post">
+                            <form action="/admin/unlistBanner/<%= product._id %>" method="post">
                               <button type="submit" class="btn btn-success" style="width: 100px;">UnList</button>
                             </form>
 
@@ -270,9 +270,9 @@
                             <% } %>
 
                               <br>
-                              <form action="/admin/editproduct/<%= product?._id %>" method="post">
+                              <!-- <form action="/admin/editproduct/<%= product?._id %>" method="post">
                                 <button type="submit" class="btn btn-primary" style="width: 100px;">Edit</button>
-                              </form>
+                              </form> -->
 
 
                       </div>

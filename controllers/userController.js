@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const wishlistModel = require('../models/wishlistModel');
 const cartModel = require('../models/cartModel');
-const categoryModel = require('../models/categoryModel')
+const categoryModel = require('../models/categoryModel');
 
 
 //Email otp
@@ -53,11 +53,15 @@ module.exports = {
             const userId = req.session.userId
 
             const type = await categoryModel.find()
+            const banners = await bannerModel.find({ update: true })
+
 
             res.render("user/home", { login: true, user: req.session.user, banners, type, userId })
         } else {
             const userId = req.session.userId
             const type = await categoryModel.find()
+            const banners = await bannerModel.find({ update: true })
+
 
             res.render('user/home', { login: false, banners, user: "", type, userId });
         }
@@ -193,7 +197,7 @@ module.exports = {
         req.session.userId = user._id;
         req.session.userLogin = true;
         const userId = req.session.userId
-        const banners = await bannerModel.find({})
+        const banners = await bannerModel.find({ update: true })
         const type = await categoryModel.find()
 
         res.render('user/home', { login: true, user: user.userName, type, banners, userId });
@@ -355,11 +359,11 @@ module.exports = {
     categorylisting: async (req, res) => {
 
         const id = req.params.id
-        
 
 
 
-        const products = await productModel.find({ type : id }).populate('type', 'categoryName')
+
+        const products = await productModel.find({ type: id }).populate('type', 'categoryName').lean()
         const userId = req.session.id
 
         res.render('user/category', { login: true, user: req.session.user, products, userId })
