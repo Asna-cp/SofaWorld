@@ -57,19 +57,7 @@ module.exports = {
     // Addproduct with image
 
     addproduct: async (req, res) => {
-        // const newProduct = ProductModel(req.body);
-        // console.log(req.body)
-        // try {
-        //     await newProduct.save()
-        //     res.redirect("/admin/home")
-        // } catch {
-        //     console.log(err,'error')
-        //     res.redirect("/admin/home")
-        // }
-
-
-
-        const { productName, type, seating, quantity, discription, price, status } = req.body;
+       const { productName, type, seating, quantity, discription, price, status } = req.body;
 
         const image = req.file;
         console.log(image);
@@ -188,15 +176,6 @@ module.exports = {
                 res.redirect('/admin/alluser')
             })
     },
-
-    //DELETE PRODUCTS
-    // deleteproducts: async (req, res) => {
-    //     let id = req.params.id;
-    //     //console.log("delete")
-    //     await ProductModel.findByIdAndDelete({ _id: id });
-    //     res.redirect("/admin/viewproducts")
-    // },
-
     
 
 
@@ -281,47 +260,8 @@ module.exports = {
             })
     },
 
-    
-   
 
 
-    // deleteproducts: (id) => {
-    //     return new Promise(async (resolve,reject) => {
-    //         await ProductModel.findByIdAndUpdate({ _id: id }, { $set: { isDeleted: true } })
-    //         resolve()
-    //     })
-    // },
-
-    // deleteproduct: () => {
-    //     return new Promise(async (resolve,reject) => {
-    //         let product = await ProductModel.find({ isDeleted: true}).populate('category')
-    //         resolve(product)
-    //     })
-    // },
-
-    // restoreProduct: (id) => {
-    //     return new Promise(async (resolve, reject) => {
-    //         await ProductModel.findByIdAndUpdate({ _id: id }, { $set: {isDeleted: false}})
-    //     })
-    // }
-
-
-
-
-
-    // addproduct: async(req,res) => {
-    //     console.log(req.body)
-    //     const { category } = req.body
-    //     const newCategory = await categoryModel({category})
-    //     await newCategory.save()
-    //     .then(()=>{
-
-    //         res.redirect('/admin/addproduct')
-    //     })
-    //     .catch(()=>{
-    //         console.log("not wor")
-    //     })
-    // }
 };
 
 

@@ -160,29 +160,7 @@ module.exports = {
         }
     },
 
-    //signup 
-    // signup: (req, res) => {
-    //     const newUser = UserModel(req.body);
-
-    //     console.log(req.body);
-    //     bcrypt.genSalt(10, (err, salt) => {
-    //         bcrypt.hash(newUser.password, salt, (err, hash) => {
-    //             if (err) throw err;
-    //             newUser.password = hash;
-    //             newUser
-    //                 .save()
-    //                 .then(() => {
-    //                     res.redirect("/loginpage");
-    //                 })
-    //                 .catch((err) => {
-    //                     console.log(err);
-    //                     res.redirect("/loginpage")
-    //                 })
-    //         })
-    //     })
-    // },
-
-    //Login
+   
     login: async (req, res) => {
         const { email, password } = req.body;
         const user = await UserModel.findOne({ $and: [{ email: email }, { status: "Unblocked" }] });
@@ -251,15 +229,7 @@ module.exports = {
     },
 
     wishListPage: async (req, res) => {
-        // let products
-        // const userId = req.session.id
-        // const wishlist = await wishlistModel.findOne({ userId : userId }).populate('productIds')
-        // console.log(userId)
-        // console.log(wishlist)
-        // if (wishlist) {
-        //     products = wishlist.productIds
-        //     res.render('user/wishlist', { login: true, user: req.session.user,wishlist })
-        // } 
+      
         const userId = req.session.userId;
         return new Promise(async (resolve, reject) => {
             let list = await wishlistModel.findOne({ userId: userId }).populate('productIds')
@@ -330,7 +300,13 @@ module.exports = {
         let cart = await cartModel.findOne({ userId })
         console.log(cart);
         if (cart) {
-            await cartModel.findOneAndUpdate({ userId, 'productIds.productId':productId }, {$inc:{"productIds.$.quantity":1}})
+            const exist = await cartModel.findOne({ userId, 'productIds.productId':productId })
+            if(exist != null) {
+                 await cartModel.findOneAndUpdate({ userId, 'productIds.productId':productId }, {$inc:{"productIds.$.quantity":1}})
+            }
+            else {
+                await cartModel.findOneAndUpdate({ userId }, { $push: { productIds: { productId } } })
+            }
             res.redirect('/productpage')
         }
         else {
@@ -346,15 +322,7 @@ module.exports = {
         const userId = req.session.userId;
         console.log(userId);
         const productId = req.params.id;
-        // const productQty = req.params.proQty;
-        // const cart = await cartModel.findOne({ userId });
-        // const product = await productModel.findOne({ _id: productId });
-        // const product_price = product.price;
-        // const cart_total = cart.cartTotal;
-        // const final_total = Math.abs(totalPrice);
-        // const totalPrice = cart_total - product_price * productQty;
-        // await cartModel.updateOne({ userId }, { $set: { cartTotal: final_total } });
-       
+     
         await cartModel.updateOne({ userId }, { $pull: { productIds: { productId } } });
         res.redirect("back");
       
@@ -378,25 +346,7 @@ module.exports = {
      res.redirect("back")
 
     },
-     //async (req, res) => {
-        //     let userData = req.session.user;
-        //     let userId = userData._id;
-        //     let id = req.params.id
-        //     let price = req.params.price;
-        //     let qty = req.params.quantity
-        //     console.log(qty);
-        //     const amt = price * qty
-        //     await cartModel.findOneAndUpdate({ userId: mongoose.Types.ObjectId( userId) }, { $pull: { products: { productId: id } }
-        //    , $inc : {cartTotal: -amt}})
-        //   .then(() => {
-        //     res.redirect("/cartPage");
-        //  });
-    //     const productId = req.params.id;
-    //     let userId = req.session.userId;
-    //     await cartModel.updateOne({ userId }, { $pull: { productIds: { productId } } })
-        
-    //     res.redirect("/cart")
-    // },
+   
 
     categorylisting: async (req, res) => {
 
@@ -406,18 +356,6 @@ module.exports = {
 
         res.render('user/category', { login: true, user: req.session.user, products, userId })
     },
-
-
-    //     quantityIncrement: async (req, res) => {
-    //         let userId = req.session.userId;
-    //         console.log(userId)
-    //         let productId = req.params.id;
-    //         let product = await productModel.findById(productId)
-    //         const cart = await cartModel.findOneAndUpdate({userId,'products.productId':productId},{$inc:{"products.$.quantity":1 , "products.$.total":product.price, cartTotal:product.price}})
-
-    //         res.redirect("back")
-    //     },
-
 
 
 }
