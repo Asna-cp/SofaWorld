@@ -46,7 +46,7 @@ module.exports = {
     viewproducts: async (req, res) => {
 
         const page = parseInt(req.query.page) || 1;
-        const items_per_page = 5;
+        const items_per_page = 3;
         const totalproducts = await ProductModel.find().countDocuments()
         console.log(totalproducts);
         const products = await ProductModel.find({}).populate('type', 'categoryName').sort({ date: -1}).skip((page - 1) * items_per_page).limit(items_per_page)

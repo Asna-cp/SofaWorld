@@ -27,6 +27,9 @@ router.post('/removecartproduct/:id',controller.removecartproduct)
 
 router.get('/cart',controller.cart)
 
+router.get('/button-increment/:id',controller.quantityIncrement)
+router.get('/button-decrement/:id',controller.quantityDecrement)
+
 
 
 //Email otp verification

@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer')
 const wishlistModel = require('../models/wishlistModel');
 const cartModel = require('../models/cartModel');
 const categoryModel = require('../models/categoryModel');
+const { default: mongoose } = require('mongoose');
 
 
 //Email otp
@@ -228,6 +229,8 @@ module.exports = {
             const products = await productModel.find({}).populate('type', 'categoryName').lean()
             const userId = req.session.id
 
+
+
             res.render('user/productpage', { login: true, user: req.session.user, products, userId })
         } else {
 
@@ -242,7 +245,7 @@ module.exports = {
         prodt = req.params.id;
         const userId = req.session.id
         const products = await productModel.findById({ _id: req.params.id }).populate('type')
-        // console.log(products);
+       
 
         res.render('user/productdetails', { login: true, user: req.session.user, products, userId })
     },
@@ -306,36 +309,28 @@ module.exports = {
     cart: async (req, res) => {
 
         const userId = req.session.userId;
-        // return new Promise(async (resolve, reject) => {
-        //     let list = await cartModel.findOne({ userId: userId }).populate('productIds')
-        //     if (list != null) {
-        //         list = list.productIds
-        //     }
-        //     else {
-        //         list = []
-        //     }
-        //     resolve(list)
-        // }).then((list) => {
-        //     res.render('user/cart', { login: true, user: req.session.user, list })
-        // })
+       
         const cartlist = await cartModel.findOne({ userId }).populate("productIds.productId");
-        const cart = cartlist.productIds
-        console.log(cart);
+        
         if (cartlist != null) {
+            const cart = cartlist.productIds
+            // console.log("cart id" + cart);
             if (req.session.userLogin) {
                 res.render('user/cart', { login: true, user: req.session.user, cart, cartlist })
             }
         } else {
-            res.render('user/cart', { login: false })
+            res.render('user/cart', { login: false, cart:[] })
         }
     },
+  
 
     addtocart: async (req, res) => {
         let productId = req.params.id
         let userId = req.session.userId
         let cart = await cartModel.findOne({ userId })
+        console.log(cart);
         if (cart) {
-            await cartModel.findOneAndUpdate({ userId }, { $push: { productIds: { productId } } })
+            await cartModel.findOneAndUpdate({ userId, 'productIds.productId':productId }, {$inc:{"productIds.$.quantity":1}})
             res.redirect('/productpage')
         }
         else {
@@ -347,22 +342,65 @@ module.exports = {
         }
     },
 
-    removecartproduct: async (req, res) => {
-        const id = req.params.id;
+     removecartproduct: async (req,res) => {
+        const userId = req.session.userId;
+        console.log(userId);
+        const productId = req.params.id;
+        // const productQty = req.params.proQty;
+        // const cart = await cartModel.findOne({ userId });
+        // const product = await productModel.findOne({ _id: productId });
+        // const product_price = product.price;
+        // const cart_total = cart.cartTotal;
+        // const final_total = Math.abs(totalPrice);
+        // const totalPrice = cart_total - product_price * productQty;
+        // await cartModel.updateOne({ userId }, { $set: { cartTotal: final_total } });
+       
+        await cartModel.updateOne({ userId }, { $pull: { productIds: { productId } } });
+        res.redirect("back");
+      
+        
+     },
+     quantityIncrement: async (req,res) => {
         let userId = req.session.userId;
-        await cartModel.findOneAndUpdate({ userId }, { $pull: { productId: id } })
-            .then(() => {
-                res.redirect("/cart")
-            })
+        let productId = req.params.id;
+        let product = await productModel.findById(productId)
+        const cart = await cartModel.findOneAndUpdate({userId,'productIds.productId':productId},{$inc:{"productIds.$.quantity":1,
+    "products.$.total":product.price,cartTotal:product.price}})
+    res.redirect("back")
     },
+
+     quantityDecrement: async (req,res) => {
+     let userId = req.session.userId;
+     let productId  = req.params.id;
+     let product =await productModel.findById(productId)
+     const cart = await cartModel.findOneAndUpdate({userId,'products.productId':productId},{$inc:{"productIds.$.quantity":-1,
+     "products.$.total":product.price*-1,cartTotal:product.price*-1}})
+     res.redirect("back")
+
+    },
+     //async (req, res) => {
+        //     let userData = req.session.user;
+        //     let userId = userData._id;
+        //     let id = req.params.id
+        //     let price = req.params.price;
+        //     let qty = req.params.quantity
+        //     console.log(qty);
+        //     const amt = price * qty
+        //     await cartModel.findOneAndUpdate({ userId: mongoose.Types.ObjectId( userId) }, { $pull: { products: { productId: id } }
+        //    , $inc : {cartTotal: -amt}})
+        //   .then(() => {
+        //     res.redirect("/cartPage");
+        //  });
+    //     const productId = req.params.id;
+    //     let userId = req.session.userId;
+    //     await cartModel.updateOne({ userId }, { $pull: { productIds: { productId } } })
+        
+    //     res.redirect("/cart")
+    // },
 
     categorylisting: async (req, res) => {
 
         const id = req.params.id
-
-
-
-
         const products = await productModel.find({ type: id }).populate('type', 'categoryName').lean()
         const userId = req.session.id
 
@@ -370,9 +408,15 @@ module.exports = {
     },
 
 
+    //     quantityIncrement: async (req, res) => {
+    //         let userId = req.session.userId;
+    //         console.log(userId)
+    //         let productId = req.params.id;
+    //         let product = await productModel.findById(productId)
+    //         const cart = await cartModel.findOneAndUpdate({userId,'products.productId':productId},{$inc:{"products.$.quantity":1 , "products.$.total":product.price, cartTotal:product.price}})
 
-
-
+    //         res.redirect("back")
+    //     },
 
 
 
