@@ -34,6 +34,7 @@
               <!-- <th scope="col">Quantity</th> -->
               <!-- <th scope="col">Total</th> -->
               <th scope="col">Update</th>
+             
             </tr>
           </thead>
           <tbody>
@@ -77,16 +78,21 @@
                   
                    <button type="submit"  class="btn btn-outline-dark" >Remove</button>
                 </form>
+                <br>
+                <form action="/wishlistaddcart/<%= product?._id %>" method="post">
+                  
+                  <button type="submit"  class="btn btn-outline-dark" >Add to cart</button>
+               </form>
                   
               </td>
             </tr>
               <% }) %>
           </tbody>
         </table>
-        <div class="checkout_btn_inner float-right">
+        <!-- <div class="checkout_btn_inner float-right">
           <a class="btn_1" href="productpage">Continue Shopping</a>
           <a class="btn_1 checkout_btn_1" href="#">Add to cart</a>
-        </div>
+        </div> -->
       </div>
     </div>
 </section>

@@ -35,11 +35,11 @@
     <!-- Navbar Right Menu-->
     <ul class="app-nav">
       <li class="app-search">
-        <input class="app-search__input" type="search" placeholder="Search">
-        <button class="app-search__button"><i class="fa fa-search"></i></button>
+        <!-- <input class="app-search__input" type="search" placeholder="Search">
+        <button class="app-search__button"><i class="fa fa-search"></i></button> -->
       </li>
       <!--Notification Menu-->
-      <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Show notifications"><i
+      <!-- <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Show notifications"><i
             class="fa fa-bell-o fa-lg"></i></a>
         <ul class="app-notification dropdown-menu dropdown-menu-right">
           <li class="app-notification__title">You have 4 new notifications.</li>
@@ -97,10 +97,10 @@
           </div>
           <li class="app-notification__footer"><a href="#">See all notifications.</a></li>
         </ul>
-      </li>
+      </li> -->
       <!-- User Menu-->
-      <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i
-            class="fa fa-user fa-lg"></i></a>
+      <!-- <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i
+            class="fa fa-user fa-lg"></i></a> -->
         <ul class="dropdown-menu settings-menu dropdown-menu-right">
           <li><a class="dropdown-item" href="page-user.html"><i class="fa fa-cog fa-lg"></i> Settings</a></li>
           <li><a class="dropdown-item" href="page-user.html"><i class="fa fa-user fa-lg"></i> Profile</a></li>
@@ -155,15 +155,15 @@
 
             </ul>
           </li>
-          <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
+          <!-- <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
                 class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Coupon</span><i
-                class="treeview-indicator fa fa-angle-right"></i></a>
+                class="treeview-indicator fa fa-angle-right"></i></a> -->
             <ul class="treeview-menu">
-              <li><a class="treeview-item" href="table-basic.html"><i class="icon fa fa-circle-o"></i> Add coupon</a>
+              <!-- <li><a class="treeview-item" href="table-basic.html"><i class="icon fa fa-circle-o"></i> Add coupon</a>
               </li>
               <li><a class="treeview-item" href="table-data-table.html"><i class="icon fa fa-circle-o"></i> View
                   coupon</a>
-              </li>
+              </li> -->
             </ul>
           </li>
           <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
@@ -185,7 +185,7 @@
       </div>
       <ul class="app-breadcrumb breadcrumb">
         <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-        <!-- <li class="breadcrumb-item"><a href="#">Dashboard</a></li> -->
+       
       </ul>
     </div>
     <html>
@@ -214,7 +214,7 @@
                 <th scope="col">Price</th>
                 <th scope="col">Image</th>
                 <th scope="col">status</th>
-                <!-- <th scope="col">OPTIONS</th> -->
+               
               </tr>
             </thead>
             <tbody>
@@ -243,17 +243,7 @@
                       <%= product?.price %>
                     </td>
                     <td><img src="/images/<%= product?.image %>" alt="" style="height: 50px; width: 60px;"></td>
-                    <!-- 
-                  <td><div style="display: flex;">
-
-                    <form action="/admin/editproduct/<%= product?._id %>" method="post">
-                      <button type="submit" class="btn btn-primary"   style="width: 100px;">edit</button>
-                    </form>
-
-                    <form action="/admin/deleteproducts/<%= product._id %>" method="post">
-                      <button type="submit" class="btn btn-danger" style="width: 100px;"
-                        onclick="return confirm('Are you sure you want to delete?')">Delete</button>
-                    </form> -->
+                 
                     <td>
                       <div>
                         <% if (product?.update==false) { %>

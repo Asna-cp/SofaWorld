@@ -24,12 +24,15 @@ router.post('/removewishlistproduct/:id',controller. userSession,controller.remo
 //router.get('/cart',controller.cart)
 router.get('/addtocart/:id',controller.addtocart)
 router.post('/removecartproduct/:id',controller.removecartproduct)
+router.post('/wishlistaddcart/:id',controller.wishlistaddcart)
 
 router.get('/cart',controller.cart)
+// router.get('/checkout',controller.checkout)
 
 router.get('/button-increment/:id',controller.quantityIncrement)
 router.get('/button-decrement/:id',controller.quantityDecrement)
 
+router.get('/checkout',controller.checkout)
 
 
 //Email otp verification

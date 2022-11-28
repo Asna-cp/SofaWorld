@@ -40,12 +40,12 @@
             </thead>
             <tbody>
               <% cart.forEach(function(product){ %>
-              
+              <% console.log(product) %>
               <tr>
                 <td>
                   <div class="media">
                     <div class="d-flex">
-                      <img src="/images/<%= product?.productId.image %>" style="width: 200px; height: 200px;" alt="" />
+                      <img src="/images/<%= product?.productId?.image %>" style="width: 200px; height: 200px;" alt="" />
                     </div>
                     <div class="media-body">
                       <p><%= product.productId?.productName %></p>
@@ -55,6 +55,7 @@
                 <td>
                   <h5><%= product.productId?.price %></h5>
                 </td>
+                
                 <td>
                    
                   <div class="qty-label">
@@ -62,23 +63,23 @@
                       
                              Qty:
     
-                            <a class="qty-up" href="/button-increment/<%=product.productId._id %>"
-                                onclick="addToCart('<%=product.productId.id%>','<%=product.productId.model%>','<%=product.productId.price %>',1)">+</a>
-                                            <input id="itemQty-<%= product.productId.id %>" type="text"
+                            <a class="qty-up" href="/button-increment/<%=product.productId?._id %>"
+                                >+</a>
+                                            <input id="itemQty-<%= product.productId?.id %>" type="text"
                                                 value="<%= product.quantity %>"
                                                 style="height: 40px; width: 30px; border: none;">
-                                            <a class="qty-down" href="/button-decrement/<%= product.productId._id %>"
-                                                onclick="addToCart('<%=product.productId.id%>','<%=product.productId.model%>','<%=product.productId.price %>',-1)">-</a>
+                                            <a class="qty-down" href="/button-decrement/<%= product.productId?._id %>"
+                                                >-</a>
                                      </div>
                                </div>
                            </td>
                       <td>
-                  <h5><%= product.productId?.total %></h5>
+                        <h5><%= product.total %></h5>
                 
                 </td>
               <td> 
                   
-                 <form action="/removecartproduct/<%= product.productId._id %>" method="post">
+                 <form action="/removecartproduct/<%= product.productId?._id %>" method="post">
                   
                 <button type="submit"  class="btn btn-outline-dark">Remove</button>
              </form>
@@ -88,25 +89,25 @@
              
               <% }) %>
               <tr class="bottom_button">
-                <td>
+                <!-- <td>
                   <a class="btn_1" href="#">Update Cart</a>
-                </td>
+                </td> -->
                 <td></td>
                 <td></td>
                 <td>
-                  <div class="cupon_text float-right">
+                  <!-- <div class="cupon_text float-right">
                     <a class="btn_1" href="#">Close Coupon</a>
-                  </div>
+                  </div> -->
                 </td>
               </tr>
               <tr>
                 <td></td>
                 <td></td>
                 <td>
-                  <h5>Subtotal</h5>
+                  <h5>Cart Total</h5>
                 </td>
                 <td>
-                  <h5>$2160.00</h5>
+                  <h5><%= cartTotal %></h5>
                 </td>
               </tr>
             
@@ -114,7 +115,7 @@
           </table>
           <div class="checkout_btn_inner float-right">
             <a class="btn_1" href="/productpage">Continue Shopping</a>
-            <a class="btn_1 checkout_btn_1" href="#">Proceed to checkout</a>
+            <a class="btn_1 checkout_btn_1" href="/checkout">Proceed to checkout</a>
           </div>
         </div>
       </div>
