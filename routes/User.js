@@ -22,8 +22,8 @@ router.post('/removewishlistproduct/:id',controller. userSession,controller.remo
 
 //CART
 //router.get('/cart',controller.cart)
-router.get('/addtocart/:id',controller.addtocart)
-router.post('/removecartproduct/:id',controller.removecartproduct)
+router.get('/addtocart/:proId',controller.addtocart)
+router.post('/removecartproduct/:id/:price/:quantity',controller.removecartproduct)
 router.post('/wishlistaddcart/:id',controller.wishlistaddcart)
 
 router.get('/cart',controller.cart)

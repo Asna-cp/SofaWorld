@@ -297,24 +297,25 @@ module.exports = {
 
 
     addtocart: async (req, res) => {
-        let productId = req.params.id
+        let productId = req.params.proId
         let userId = req.session.userId
-        let cart = await cartModel.findOne({ userId })
+        let cart = await cartModel.findOne({ userId: userId })
         const product = await productModel.findOne({ _id: productId })
-        console.log(cart);
+        const total = product.price
+
         if (cart) {
             const exist = await cartModel.findOne({ userId, 'productIds.productId': productId })
             if (exist != null) {
-                await cartModel.findOneAndUpdate({ userId, 'productIds.productId': productId }, { $inc: { "productIds.$.quantity": 1, "productIds.$.total": product.price,cartTotal:product.price} })
+                await cartModel.findOneAndUpdate({ userId, 'productIds.productId': productId }, { $inc: { "productIds.$.quantity": 1, "productIds.$.total": total, cartTotal: total } })
             }
             else {
-                await cartModel.findOneAndUpdate({ userId }, { $push: { productIds: { productId,total:product.price},$inc:{cartTotal:product.price } }})
+                await cartModel.findOneAndUpdate({ userId:userId }, { $push: { productIds: { productId, total } }, $inc: { cartTotal: total } } )
             }
             res.redirect('/productpage')
         }
         else {
-            const newcart = new cartModel({ userId , productIds: [{ productId , productId,total:product.price }] ,cartTotal:product.price })
-            newcart.save()
+            const newcart = new cartModel({ userId, productIds: [{ productId, total }], cartTotal: total })
+            await newcart.save()
                 .then(() => {
                     res.redirect('/productpage')
                 })
@@ -325,21 +326,25 @@ module.exports = {
         const userId = req.session.userId;
         console.log(userId);
         const productId = req.params.id;
+        const price = req.params.price
+        const quantity = req.params.quantity
+        const product = await productModel.findOne({ _id: productId })
+        const amt = price*quantity
 
-        await cartModel.updateOne({ userId }, { $pull: { productIds: { productId } } });
+        await cartModel.findOneAndUpdate({ userId : userId }, { $pull: { productIds: { productId:productId }}, $inc: { cartTotal: -amt }});
         res.redirect("back");
 
 
     },
     quantityIncrement: async (req, res) => {
-        console.log("inc");
+
         let userId = req.session.userId;
         let productId = req.params.id;
-        let product = await productModel.findOne({_id:productId})
+        let product = await productModel.findOne({ _id: productId })
         const cart = await cartModel.findOneAndUpdate({ userId, 'productIds.productId': productId }, {
             $inc: {
                 "productIds.$.quantity": 1,
-                "productIds.$.total": product.price, 
+                "productIds.$.total": product.price,
                 cartTotal: product.price
             }
         })
@@ -347,10 +352,9 @@ module.exports = {
     },
 
     quantityDecrement: async (req, res) => {
-        console.log("dec");
         let userId = req.session.userId;
         let productId = req.params.id;
-        let product = await productModel.findOne({_id:productId})
+        let product = await productModel.findOne({ _id: productId })
         const cart = await cartModel.findOneAndUpdate({ userId, 'productIds.productId': productId }, {
             $inc: {
                 "productIds.$.quantity": -1,
@@ -396,10 +400,10 @@ module.exports = {
                 })
         }
     },
-    
-    checkout: (req, res) => {
-        res.render('user/checkout',{login:true, user: "user"})
 
-},
+    checkout: (req, res) => {
+        res.render('user/checkout', { login: true, user: "user" })
+
+    },
 
 }

@@ -79,7 +79,7 @@
                 </td>
               <td> 
                   
-                 <form action="/removecartproduct/<%= product.productId?._id %>" method="post">
+                 <form action="/removecartproduct/<%= product.productId?._id %>/<%= product.productId?.price %>/<%= product.quantity %> " method="post">
                   
                 <button type="submit"  class="btn btn-outline-dark">Remove</button>
              </form>
