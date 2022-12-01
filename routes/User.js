@@ -39,7 +39,8 @@ router.get('/checkout',controller.checkout)
 
 //User profile
 router.get('/profile',controller.profile)
-router.get('/addaddress/',controller.addaddress)
+router.get('/addaddress',controller.addaddress)
+router.post('/addnewaddress',controller.newaddress)
 
 
 
