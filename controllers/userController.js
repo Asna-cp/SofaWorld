@@ -209,11 +209,20 @@ module.exports = {
 
         if (req.session.userLogin) {
             const products = await productModel.find({}).populate('type', 'categoryName').lean()
-            const userId = req.session.id
+            const userId = req.session.userId;
 
 
+            let list = await wishlistModel.findOne({ userId }).populate('productIds')
+            if (list != null) {
+                list = list.productIds
+            }
+            else {
+                list = []
+            }
 
-            res.render('user/productpage', { login: true, user: req.session.user, products, userId })
+            console.log(list);
+
+            res.render('user/productpage', { login: true, user: req.session.user, products, userId, list })
         } else {
 
             res.render('user/home', { login: false });
@@ -263,7 +272,7 @@ module.exports = {
             const newwishlist = new wishlistModel({ userId, productIds: [productId] })
             newwishlist.save()
                 .then(() => {
-                    res.redirect('/productpage')
+                    res.redirect('back')
                 })
         }
     },
@@ -274,7 +283,7 @@ module.exports = {
         let userId = req.session.userId;
         await wishlistModel.findOneAndUpdate({ userId }, { $pull: { productIds: id } })
             .then(() => {
-                res.redirect("/wishListPage")
+                res.redirect("back")
             })
     },
 
@@ -446,9 +455,10 @@ module.exports = {
         if (address) {
             let address3 = address.address;
 
-            res.render("user/profile", { user: req.session.user,
+            res.render("user/profile", {
+                user: req.session.user,
                 users,
-                address3, 
+                address3,
                 address,
                 index: 1,
                 login: true
@@ -458,9 +468,9 @@ module.exports = {
 
             if (req.session.userLogin) {
                 res.render("user/profile", { user: req.session.user, address, login: true });
-            }else {
+            } else {
                 res.redirect('/loginpage')
-            } 
+            }
         }
     },
 
@@ -490,7 +500,7 @@ module.exports = {
 
         if (exist) {
             await addressModel.findOneAndUpdate({
-                userId:userId
+                userId: userId
             }, {
                 $push: {
                     address: {
