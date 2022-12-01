@@ -540,12 +540,25 @@ module.exports = {
             })
         }
 
-
     },
+    deleteAddress: async(req,res) => {
+        let userId = req.session.userId;
+        let addressId = req.params.id
+
+        let address = await addressModel.findOneAndUpdate(
+            {userId:userId},
+            { $pull:{ address: {_id: addressId}}},
+        ).then( () => {
+            res.redirect('/profile')
+        })
+        
+        },
+    } 
+
+    
 
     // profile: (req,res) => {
     //     res.render('user/profile', { login: true, user: "user" })
     // },
 
 
-}

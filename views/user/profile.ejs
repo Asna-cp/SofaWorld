@@ -161,8 +161,11 @@
                                                 <span class="text-secondary">Phone</span>
                                         </li>
                                     </ul>
+                                    <form action="/deleteAddress/<%= x?._id %>" method="post">
 
-                                    <a href="/deleteAddress/<%= x?._id %>"><button type="button" onclick="removeAddress('<%= x?._id %>')" class="btn btn-danger"> Remove</button></a>
+                                    <button type="submit" 
+                                        onclick="removeAddress('<%= x?._id %>')" class="btn btn-danger"> Remove</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
