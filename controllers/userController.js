@@ -7,6 +7,7 @@ const cartModel = require('../models/cartModel');
 const categoryModel = require('../models/categoryModel');
 const { default: mongoose } = require('mongoose');
 const { checkout } = require('../routes/User');
+const addressModel = require('../models/addressModel')
 
 
 //Email otp
@@ -36,18 +37,10 @@ otp = otp * 1000000;
 otp = parseInt(otp);
 console.log(otp);
 
-
-
-
-
 module.exports = {
 
 
-
-
-
-
-    // HOME PAGE
+// HOME PAGE
     home: async (req, res) => {
         const banners = await bannerModel.find({})
         //res.send("you just created  a user ")
@@ -175,6 +168,7 @@ module.exports = {
         }
         req.session.user = user.userName;
         req.session.userId = user._id;
+        req.session.userstatus = user.status;
         req.session.userLogin = true;
         const userId = req.session.userId
         const banners = await bannerModel.find({ update: true })
@@ -192,13 +186,22 @@ module.exports = {
 
     //Session middleWare
 
-    userSession: (req, res, next) => {
-        if (req.session.userLogin) {
-            next()
-        } else {
-            res.redirect('/loginpage')
-        }
-    },
+    // userSession: async (req,res,next) => {
+    //     let UserData = req.session.userId;
+    //     if (UserData) {
+    //         let userId = UserData._id;
+    //         let user = await UserModel.findById({ _id: userId });
+    //         if (req.session.userLogin && user.status === 'Unblocked'){
+    //             next()
+    //         }else{
+    //             res.redirect('/loginpage')
+    //         }
+    //     }else{
+    //         res.redirect('/loginpage')
+    //     }
+    // },
+
+    
 
     //view the products in productpage
 
@@ -401,9 +404,139 @@ module.exports = {
         }
     },
 
-    checkout: (req, res) => {
-        res.render('user/checkout', { login: true, user: "user" })
+    checkout:async (req, res) => {
+        
+        // let userId = req.session.userId;
+        // const address = await addressModel.findOne({ userId:userId })
+        // let user = await UserModel.findById({ userId });
+        // let cart = await cartModel.findOne({ userId: userId }).populate("productIds.productId")
 
+
+        // let totalAmount = cartlist.cartTotal;
+        // let cartProducts = cartlist.products
+        // let address = address1.address
+        // let selectedAddess = req.body.index ?  address[req.body.index] : address1.address[0]
+        if (req.session.userLogin) {
+
+
+
+          res.render("user/checkout", {  login: true, user: req.session.user });
+        } else {
+          res.render("user/checkout", { login: false });
+        }
+        
+
+
+    // checkout: (req, res) => {
+    //     res.render('user/checkout', { login: true, user: "user" })
+
+    // },
+
+},
+
+profile: async (req, res) => {
+    let userId = req.session.userId;
+
+    // let brand = await brandModel.find();
+    let user = await UserModel.findOne({_id: userId});
+    let address = await addressModel.findOne({userId: userId})
+    console.log(address)
+    
+
+    if (address) {
+        let address3 = address.address;
+       
+            res.render("user/profile", {
+                user,
+                address3,
+                address,
+                index: 1,
+                login: true
+            });
+
+        } else {
+          
+        if (req.session.userLogin) {
+            res.render("user/profile", {user,address, login: true});
+        } else {
+            res.render("user/profile", {user,address, login: false});
+        }
+    }
     },
+
+
+
+    addaddress: async (req,res) => {
+        let userId = req.session.userId
+     
+        if (req.session.userLogin) {
+            res.render("user/addaddress", { user: req.session.user ,login:true });
+        } else {
+            res.render("user/addaddress", { login:false });
+        }
+    },
+    newaddress: async (req,res) => {
+        const {
+            fullName,
+            phone,
+            pincode,
+            addressLine,
+            city,
+            state,
+        } = req.body;
+        let UserData = req.session.user;
+        let userId = req.session.userId;
+        let exist = await addressModel.findOne({userId: userId})
+
+        if (exist) {
+            await addressModel.findOneAndUpdate({
+                userId
+            }, {
+                $push: {
+                    address: {
+                        fullName,
+                        phone,
+                        pincode,
+                        addressLine,
+                        city,
+                        state,
+
+                    }
+                }
+            }) .then(() => {
+                console.log("address added");
+                res.redirect("user/addaddress")
+            })
+        } else{
+            const address = new addressModel({
+                userId,
+                address: [
+                    {
+                        fullName,
+                        phone,
+                        pincode,
+                        addressLine,
+                        city,
+                        state,
+ 
+                    }
+                ]
+            });
+            await address.save().then(() => {
+                console.log("address added");
+                res.redirect("user/addaddress");
+
+            }).catch((err) =>{
+                res.redirect("user/addaddress");
+            })
+        }
+        
+        
+    },
+
+    // profile: (req,res) => {
+    //     res.render('user/profile', { login: true, user: "user" })
+    // },
+ 
 
 }

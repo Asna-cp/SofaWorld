@@ -1,8 +1,9 @@
 const express = require('express');
-const { verifyotp } = require('../controllers/userController');
+// const { verifyotp } = require('../controllers/userController');
 const router = express.Router()
 
 const controller = require('../controllers/userController')
+const userSession = require('../middleware/auth')
 
 
 // GET METHOD
@@ -10,15 +11,15 @@ const controller = require('../controllers/userController')
 router.get('/', controller.home)
 router.get('/loginpage',controller.signin)
 router.get('/logout', controller.logout)
-router.get('/productpage',controller.userSession,controller.productpage)
+router.get('/productpage',userSession.userSession, controller.productpage)
 
-router.get('/productdetails/:id',controller. userSession,controller.productdetails)
-router.get('/category/:id',controller. categorylisting)
+router.get('/productdetails/:id',userSession.userSession, controller.productdetails)
+router.get('/category/:id',controller.categorylisting)
 
 //wishlist
-router.get('/addtowishlist/:productId',controller. userSession,controller.addtowishlist)
-router.get('/wishListPage',controller.userSession,controller.wishListPage)
-router.post('/removewishlistproduct/:id',controller. userSession,controller.removewishlistproduct)
+router.get('/addtowishlist/:productId',userSession.userSession, controller.addtowishlist)
+router.get('/wishListPage',userSession.userSession, controller.wishListPage)
+router.post('/removewishlistproduct/:id',userSession.userSession, controller.removewishlistproduct)
 
 //CART
 //router.get('/cart',controller.cart)
@@ -33,6 +34,13 @@ router.get('/button-increment/:id',controller.quantityIncrement)
 router.get('/button-decrement/:id',controller.quantityDecrement)
 
 router.get('/checkout',controller.checkout)
+// router.post('/address/',controller.addaddresspage)
+
+
+//User profile
+router.get('/profile',controller.profile)
+router.get('/addaddress/',controller.addaddress)
+
 
 
 //Email otp verification
