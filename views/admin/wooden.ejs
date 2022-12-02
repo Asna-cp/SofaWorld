@@ -13,7 +13,7 @@
     <div class="table-responsive text-nowrap">
       <form action="/admin/addcategory" method="post" class="mx-4 mt-4">
         <div class="input-group">
-        
+
           <input type="text" name="categoryName" class="form-control" placeholder="category" required />
           <button class="btn btn-success" type="submit" id="button-addon2">
             Add new
@@ -34,20 +34,22 @@
             <tbody class="table-border-bottom-0">
               <% category.forEach(function(category){ %>
 
-              
-              <tr>
-                <td><%= category.categoryName %></td>
 
-                <td>
-                  <div class="text-center">
-                    <form action="/admin/deletecategory/<%= category._id %>" method="post">
-                      <button type="submit" class="btn btn-danger"
-                        onclick="return confirm('Are you sure you want to delete?')">Delete</button>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-              <% }) %>
+                <tr>
+                  <td>
+                    <%= category.categoryName %>
+                  </td>
+
+                  <td>
+                    <div class="text-center">
+                      <form action="/admin/deletecategory/<%= category._id %>" method="post">
+                        <button type="submit" class="btn btn-danger"
+                          onclick="return confirm('Are you sure you want to delete?')">Delete</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+                <% }) %>
             </tbody>
           </table>
         </div>

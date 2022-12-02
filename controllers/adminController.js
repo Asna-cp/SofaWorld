@@ -49,15 +49,15 @@ module.exports = {
         const items_per_page = 5;
         const totalproducts = await ProductModel.find().countDocuments()
         console.log(totalproducts);
-        const products = await ProductModel.find({}).populate('type', 'categoryName').sort({ date: -1}).skip((page - 1) * items_per_page).limit(items_per_page)
-        res.render('admin/viewproducts', { products, index: 1, page,hasNextPage: items_per_page * page < totalproducts,hasPreviousPage: page > 1,PreviousPage: page - 1 })
+        const products = await ProductModel.find({}).populate('type', 'categoryName').sort({ date: -1 }).skip((page - 1) * items_per_page).limit(items_per_page)
+        res.render('admin/viewproducts', { products, index: 1, page, hasNextPage: items_per_page * page < totalproducts, hasPreviousPage: page > 1, PreviousPage: page - 1 })
     },
 
 
     // Addproduct with image
 
     addproduct: async (req, res) => {
-       const { productName, type, seating, quantity, discription, price, status } = req.body;
+        const { productName, type, seating, quantity, discription, price, status } = req.body;
 
         const image = req.file;
         console.log(image);
@@ -85,45 +85,45 @@ module.exports = {
                 this.console.log(err.message);
                 res.redirect("/admin/addproductpage")
             });
- 
+
     },
 
-    editproduct: async(req,res) => {
+    editproduct: async (req, res) => {
         let id = req.params.id
-        let product = await ProductModel.findOne({_id:id}).populate('type')
+        let product = await ProductModel.findOne({ _id: id }).populate('type')
         let category = await CategoryModel.find()
 
         console.log(product);
-        
-        
-        res.render('admin/editproduct',{category,product})
+
+
+        res.render('admin/editproduct', { category, product })
 
 
     },
-     
+
     //update products when edit
 
 
-    updateproduct: async (req,res) => {
-        const { productName,type,seating,quantity,discription,price,image,status } = req.body;
+    updateproduct: async (req, res) => {
+        const { productName, type, seating, quantity, discription, price, image, status } = req.body;
         console.log(req.body);
 
-        if(req.file) {
+        if (req.file) {
             let image = req.file;
             await ProductModel.findByIdAndUpdate(
-                {_id:req.params.id}, {$set: {image: image.filename}}
-            ); 
+                { _id: req.params.id }, { $set: { image: image.filename } }
+            );
 
         }
         let details = await ProductModel.findByIdAndUpdate(
-            {_id: req.params.id}, {$set: { productName,type,seating,quantity,discription,price,image,status}}
-        ); 
+            { _id: req.params.id }, { $set: { productName, type, seating, quantity, discription, price, image, status } }
+        );
 
         await details.save().then(() => {
             res.redirect('/admin/viewproducts')
         })
 
-       
+
     },
 
 
@@ -176,13 +176,13 @@ module.exports = {
                 res.redirect('/admin/alluser')
             })
     },
-    
 
 
 
-//Soft Delete
-     //Product List and Unlist
-     listProduct: async (req, res) => {
+
+    //Soft Delete
+    //Product List and Unlist
+    listProduct: async (req, res) => {
         const id = req.params.id
         await ProductModel.findByIdAndUpdate({ _id: id }, { $set: { update: true } })
             .then(() => {
@@ -203,18 +203,18 @@ module.exports = {
 
     //Add Banners
 
-    addBannerpage: async (req,res) => {
-      
+    addBannerpage: async (req, res) => {
+
         res.render('admin/addbanner')
     },
 
-    viewBannerPage: async (req,res) => {
+    viewBannerPage: async (req, res) => {
         const banners = await bannerModel.find({})
         console.log(banners)
-        res.render('admin/viewbannerpage', { banners,index:1 })
+        res.render('admin/viewbannerpage', { banners, index: 1 })
     },
 
-    addBanner: async (req,res) => {
+    addBanner: async (req, res) => {
         const { bannerName, discription } = req.body
 
         const image = req.file;
@@ -228,21 +228,21 @@ module.exports = {
         console.log(newBanner);
 
         await newBanner
-        .save()
-        .then(() => {
-            res.redirect("/admin/viewbannerpage");
-        })
-        .catch((err) => {
-            console.log(err.message);
-            res.redirect("/admin/bannerpage")
-        })
-        
+            .save()
+            .then(() => {
+                res.redirect("/admin/viewbannerpage");
+            })
+            .catch((err) => {
+                console.log(err.message);
+                res.redirect("/admin/bannerpage")
+            })
+
     },
 
 
     //Soft Delete
-     //Banner List and Unlist
-     listBanner: async (req, res) => {
+    //Banner List and Unlist
+    listBanner: async (req, res) => {
         const id = req.params.id
         await bannerModel.findByIdAndUpdate({ _id: id }, { $set: { update: true } })
             .then(() => {

@@ -184,23 +184,6 @@ module.exports = {
         res.redirect('/');
     },
 
-    //Session middleWare
-
-    // userSession: async (req,res,next) => {
-    //     let UserData = req.session.userId;
-    //     if (UserData) {
-    //         let userId = UserData._id;
-    //         let user = await UserModel.findById({ _id: userId });
-    //         if (req.session.userLogin && user.status === 'Unblocked'){
-    //             next()
-    //         }else{
-    //             res.redirect('/loginpage')
-    //         }
-    //     }else{
-    //         res.redirect('/loginpage')
-    //     }
-    // },
-
 
 
     //view the products in productpage
@@ -413,35 +396,44 @@ module.exports = {
         }
     },
 
-    checkout: async (req, res) => {
-
-        // let userId = req.session.userId;
-        // const address = await addressModel.findOne({ userId:userId })
-        // let user = await UserModel.findById({ userId });
-        // let cart = await cartModel.findOne({ userId: userId }).populate("productIds.productId")
-
-
-        // let totalAmount = cartlist.cartTotal;
-        // let cartProducts = cartlist.products
-        // let address = address1.address
-        // let selectedAddess = req.body.index ?  address[req.body.index] : address1.address[0]
-        if (req.session.userLogin) {
+    // checkout: async (req, res) => {
+    //     if (req.session.userLogin) {
+    //         res.render("user/checkout", { login: true, user: req.session.user });
+    //     } else {
+    //         res.render("user/checkout", { login: false });
+    //     }
+    // },
 
 
+    //Place Order
 
-            res.render("user/checkout", { login: true, user: req.session.user });
-        } else {
-            res.render("user/checkout", { login: false });
-        }
+    checkout: async (req,res) => {
+        try{
+            let index = Number(req.body.index);
+            if(!index) {
+                index = 0;
+            }
+            const userId = req.session.userId;
+            const addresses = await addressModel.findOne({ user: userId });
+            let address;
+            if (addresses) {
+                address = addresses.address;
+            } else {
+                address = [];
+            }
+            const cartItems = await cartModel.findOne({ owner: userId });
+            if (cartItems) {
+                res.render("user/checkout", {  login: true, user: req.session.user,address,index,cartItems });
 
+            }else{
+                res.redirect("/login");
+            }
+         } catch {
+                res.json("something wrong please try again");
+            }
+        },
+   
 
-
-        // checkout: (req, res) => {
-        //     res.render('user/checkout', { login: true, user: "user" })
-
-        // },
-
-    },
 
     profile: async (req, res) => {
         let userId = req.session.userId;
@@ -541,21 +533,27 @@ module.exports = {
         }
 
     },
-    deleteAddress: async(req,res) => {
+    deleteAddress: async (req, res) => {
         let userId = req.session.userId;
         let addressId = req.params.id
 
         let address = await addressModel.findOneAndUpdate(
-            {userId:userId},
-            { $pull:{ address: {_id: addressId}}},
-        ).then( () => {
+            { userId: userId },
+            { $pull: { address: { _id: addressId } } },
+        ).then(() => {
             res.redirect('/profile')
         })
-        
-        },
-    } 
 
-    
+    },
+    changeAddress: async (req, res) => {
+        const addressId = req.params.id
+        const currentAdd = await profile.findOne({ 'address._id': addressId })
+        console.log(currentAdd);
+        res.render('user/checkout', { currentAdd })
+    },
+}
+
+
 
     // profile: (req,res) => {
     //     res.render('user/profile', { login: true, user: "user" })
