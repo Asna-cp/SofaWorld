@@ -30,9 +30,9 @@
           <thead>
             <tr>
               <th scope="col">Product</th>
+              <th>Product Name</th>
               <th scope="col">Price</th>
-              <!-- <th scope="col">Quantity</th> -->
-              <!-- <th scope="col">Total</th> -->
+             
               <th scope="col">Update</th>
              
             </tr>
@@ -41,15 +41,16 @@
             <% list.forEach(function(product){ %>
             <tr>
               <td>
-                <div class="media">
-                  <div class="d-flex">
+               
+                  
                     <img src="/images/<%= product?.image %>" style="width: 200px; height: 200px;" alt="" />
-                  </div>
-                  <div class="media-body">
-                    <p> <%= product?.productName %></p>
-                  </div>
-                </div>
+                  
+                
+                
               </td>
+              <td>  <div class="media-body">
+                <p> <%= product?.productName %></p>
+              </div></td>
               <td>
                 <h5> <%= product?.price %></h5>
               </td>
@@ -76,7 +77,7 @@
                  <!-- <i class="bi bi-heart-fill"></i> -->
                  <form action="/removewishlistproduct/<%= product?._id %>" method="post">
                   
-                   <button type="submit"  class="btn btn-outline-dark" >Remove</button>
+                   <button type="submit"  class="btn btn-outline-dark" style="width: 7rem;">Remove</button>
                 </form>
                 <br>
                 <form action="/wishlistaddcart/<%= product?._id %>" method="post">

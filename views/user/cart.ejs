@@ -61,15 +61,13 @@
                   <div class="qty-label">
                     <div class="input-number"> 
                       
-                             Qty:
-    
-                            <a class="qty-up" href="/button-increment/<%=product.productId?._id %>"
-                                >+</a>
+                            <a class="qty-up" href="/button-increment/<%=product.productId?._id %>" >+</a>
+                               
                                             <input id="itemQty-<%= product.productId?.id %>" type="text"
                                                 value="<%= product.quantity %>"
                                                 style="height: 40px; width: 30px; border: none;">
-                                            <a class="qty-down" href="/button-decrement/<%= product.productId?._id %>"
-                                                >-</a>
+                                            <a class="qty-down" href="/button-decrement/<%= product.productId?._id %>">-</a>
+                                               
                                      </div>
                                </div>
                            </td>

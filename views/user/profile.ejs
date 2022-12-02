@@ -1,180 +1,199 @@
-<%-include('../user/layout/userheader.ejs') -%>
-<section style="background-color: #eee;">
-    <div class="container py-5">
-        <div class="row">
-            <div class="col">
-                <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
-                    <ol class="breadcrumb mb-0">
-                        <!-- <li class="breadcrumb-item"><a href="#">Home</a></li>
+<%-include('.. /user/layout/userheader.ejs') -%>
+    <section style="background-color: #eee;">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col">
+                    <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+                        <ol class="breadcrumb mb-0">
+                            <!-- <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item"><a href="#">User</a></li> -->
-                        <li class="breadcrumb-item active" aria-current="page">User Profile</li>
-                    </ol>
-                </nav>
+                            <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="card mb-4">
-                    <div class="card-body text-center">
-                       
-                            <img src="https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png" alt="Admin" class="rounded-circle" width="150">
-                      
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+
+                            <img src="https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png"
+                                alt="Admin" class="rounded-circle" width="150">
+
                             <!-- <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150"> -->
-                      
 
-                        <h5 class="my-3"><%= users?.fullName %></h5>
-                        <p class="text-muted mb-1"><%= users?.email %></p>
-                        <!-- <p class="text-muted mb-4">Bay Area, San Francisco, CA</p> -->
-                        <!-- <div class="d-flex justify-content-center mb-2">
+
+                            <h5 class="my-3">
+                                <%= users?.fullName %>
+                            </h5>
+                            <p class="text-muted mb-1">
+                                <%= users?.email %>
+                            </p>
+                            <!-- <p class="text-muted mb-4">Bay Area, San Francisco, CA</p> -->
+                            <!-- <div class="d-flex justify-content-center mb-2">
                             <button type="button" class="btn btn-primary">Follow</button>
                             <button type="button" class="btn btn-outline-primary ms-1">Message</button>
                         </div> -->
+                        </div>
                     </div>
-                </div>
-                <div class="card mt-3">
-                    <ul class="list-group list-group-flush">
-                      <li
-                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
-                      >
-                      <!-- <i class="fa-solid fa-cart-circle-check"></i>
+                    <div class="card mt-3">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <!-- <i class="fa-solid fa-cart-circle-check"></i>
                         <a href="/orderDetails"><h6 class="mb-0">Orders</h6></a>
                         <span class="text-secondary"></span>
                       </li> -->
-                      <li
-                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
-                      >
-                        <!-- <i class="bi bi-folder-plus"></i>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <!-- <i class="bi bi-folder-plus"></i>
                         <button onclick="allAddress()"><h6 class="mb-0">Saved address</h6></button> 
                         <span class="text-secondary">iPro</span>
                       </li> -->
-                      <li
-                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
-                      >
-                        <!-- <i class="bi bi-person-video3"></i>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <!-- <i class="bi bi-person-video3"></i>
                         <h6 class="mb-0">User data</h6> -->
-                        <span class="text-secondary"></span>
-                      </li>
-                    </ul>
-                  </div>
-            </div>
-
-            <div class="col-lg-8">
-                <div class="card card-body" style="background-color:rgb(220, 217, 217) ;">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Full Name</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0"><%= users?.fullName %>
-                                </p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Email</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0"><%=users?.email %></p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Phone</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0"><%= users?.phoneNumber %></p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Address</p>
-                            </div>
-                            <% if (address ) { %>
-                                <div class="col-sm-9 text-secondary">
-                                    Address added
-                                </div>
-                            <% }  else { %>
-                                <div class="col-sm-9 text-secondary">
-                                    
-                                </div>
-                            <% } %>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <!-- <a class="btn btn-info " target="__blank" href="/editUser">Edit</a> -->
-                                <% if (address ) { %>
-                                    <a class="btn btn-success " target="__blank" href="/addaddress">Add new address</a>
-                                <% }  else { %>
-                                    <a class="btn btn-success " target="__blank" href="/addaddress">Add address</a>
-                                <% } %>
-                            </div>
-                        </div>
+                                <span class="text-secondary"></span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
+                <div class="col-lg-8">
+                    <div class="card card-body" style="background-color:rgb(220, 217, 217) ;">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Full Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%= users?.fullName %>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Email</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%=users?.email %>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Phone</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%= users?.phoneNumber %>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Address</p>
+                                </div>
+                                <% if (address ) { %>
+                                    <div class="col-sm-9 text-secondary">
+                                        Address added
+                                    </div>
+                                    <% } else { %>
+                                        <div class="col-sm-9 text-secondary">
 
-                <div class="row">
-                    <% address?.address?.forEach(function (x) { %>
-                        
-                    
-                    <div class="col-md-6">
-                        <div class="card mb-4 mb-md-0">
-                            <div class="card-body">
-                                <p class="mb-4"><span class="text-primary font-italic me-1">Address</span> <%= index++ %> 
-                                </p>
-                                <div class="card-body p-0">
-                                    <ul class="list-group list-group-flush rounded-3">
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <h6 class="mb-0"><%= x?.fullName %></h6>
-                                                <span class="text-secondary">Fulll Name</span>
-                                        </li>
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <h6 class="mb-0"><%= x?.houseName %></h6>
-                                                <span class="text-secondary">House/Office</span>
-                                        </li>
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <h6 class="mb-0"><%= x?.city %></h6>
-                                                <span class="text-secondary">City</span>
-                                        </li>
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <h6 class="mb-0"><%= x?.state %></h6>
-                                                <span class="text-secondary">State</span>
-                                        </li>
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <h6 class="mb-0"><%= x?.pincode %></h6>
-                                                <span class="text-secondary">Pincode</span>
-                                        </li>
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <h6 class="mb-0"><%= x?.phone %></h6>
-                                                <span class="text-secondary">Phone</span>
-                                        </li>
-                                    </ul>
-                                    <form action="/deleteAddress/<%= x?._id %>" method="post">
-
-                                    <button type="submit" 
-                                        onclick="removeAddress('<%= x?._id %>')" class="btn btn-danger"> Remove</button>
-                                    </form>
+                                        </div>
+                                        <% } %>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <!-- <a class="btn btn-info " target="__blank" href="/editUser">Edit</a> -->
+                                    <% if (address ) { %>
+                                        <a class="btn btn-success " target="__blank" href="/addaddress">Add new
+                                            address</a>
+                                        <% } else { %>
+                                            <a class="btn btn-success " target="__blank" href="/addaddress">Add
+                                                address</a>
+                                            <% } %>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <% }) %> 
+
+
+                    <div class="row">
+                        <% address?.address?.forEach(function (x) { %>
+
+
+                            <div class="col-md-6">
+                                <div class="card mb-4 mb-md-0">
+                                    <div class="card-body">
+                                        <p class="mb-4"><span class="text-primary font-italic me-1">Address</span>
+                                            <%= index++ %>
+                                        </p>
+                                        <div class="card-body p-0">
+                                            <ul class="list-group list-group-flush rounded-3">
+                                                <li
+                                                    class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                                    <h6 class="mb-0">
+                                                        <%= x?.fullName %>
+                                                    </h6>
+                                                    <span class="text-secondary">Fulll Name</span>
+                                                </li>
+                                                <li
+                                                    class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                                    <h6 class="mb-0">
+                                                        <%= x?.houseName %>
+                                                    </h6>
+                                                    <span class="text-secondary">House/Office</span>
+                                                </li>
+                                                <li
+                                                    class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                                    <h6 class="mb-0">
+                                                        <%= x?.city %>
+                                                    </h6>
+                                                    <span class="text-secondary">City</span>
+                                                </li>
+                                                <li
+                                                    class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                                    <h6 class="mb-0">
+                                                        <%= x?.state %>
+                                                    </h6>
+                                                    <span class="text-secondary">State</span>
+                                                </li>
+                                                <li
+                                                    class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                                    <h6 class="mb-0">
+                                                        <%= x?.pincode %>
+                                                    </h6>
+                                                    <span class="text-secondary">Pincode</span>
+                                                </li>
+                                                <li
+                                                    class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                                    <h6 class="mb-0">
+                                                        <%= x?.phone %>
+                                                    </h6>
+                                                    <span class="text-secondary">Phone</span>
+                                                </li>
+                                            </ul>
+                                            <form action="/deleteAddress/<%= x?._id %>" method="post">
+
+                                                <button type="submit" onclick="removeAddress('<%= x?._id %>')"
+                                                    class="btn btn-danger"> Remove</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<%-include('../user/layout/userfooter.ejs') -%>
+    <%-include('.. /user/layout/userfooter.ejs') -%>

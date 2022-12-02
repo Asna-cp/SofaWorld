@@ -396,15 +396,6 @@ module.exports = {
         }
     },
 
-    // checkout: async (req, res) => {
-    //     if (req.session.userLogin) {
-    //         res.render("user/checkout", { login: true, user: req.session.user });
-    //     } else {
-    //         res.render("user/checkout", { login: false });
-    //     }
-    // },
-
-
     //Place Order
 
     checkout: async (req,res) => {
@@ -414,16 +405,18 @@ module.exports = {
                 index = 0;
             }
             const userId = req.session.userId;
-            const addresses = await addressModel.findOne({ user: userId });
+            const addresses = await addressModel.findOne({ userId });
             let address;
             if (addresses) {
                 address = addresses.address;
             } else {
                 address = [];
             }
-            const cartItems = await cartModel.findOne({ owner: userId });
+            const cartItems = await cartModel.findOne({ userId });
             if (cartItems) {
                 res.render("user/checkout", {  login: true, user: req.session.user,address,index,cartItems });
+
+            
 
             }else{
                 res.redirect("/login");
@@ -441,8 +434,8 @@ module.exports = {
         // let brand = await brandModel.find();
         let users = await UserModel.findOne({ _id: userId });
         let address = await addressModel.findOne({ userId: userId })
-        console.log(address)
-
+        console.log(users+"-------user")
+        
 
         if (address) {
             let address3 = address.address;
@@ -459,7 +452,7 @@ module.exports = {
         } else {
 
             if (req.session.userLogin) {
-                res.render("user/profile", { user: req.session.user, address, login: true });
+                res.render("user/profile", { user: req.session.user,users, address, login: true });
             } else {
                 res.redirect('/loginpage')
             }
@@ -545,18 +538,9 @@ module.exports = {
         })
 
     },
-    changeAddress: async (req, res) => {
-        const addressId = req.params.id
-        const currentAdd = await profile.findOne({ 'address._id': addressId })
-        console.log(currentAdd);
-        res.render('user/checkout', { currentAdd })
-    },
+   
 }
 
 
-
-    // profile: (req,res) => {
-    //     res.render('user/profile', { login: true, user: "user" })
-    // },
 
 
