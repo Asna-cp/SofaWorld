@@ -42,7 +42,11 @@ router.get('/profile', controller.profile)
 router.get('/addaddress', controller.addaddress)
 router.post('/addnewaddress', controller.newaddress)
 
+//checkout
 router.post('/checkout',controller.checkout)
+router.get('/payment-verify',controller.orderconfirm)
+router.post('/checkout',controller.payment)
+router.get('/order-success',controller.orderSuccess)
 
 
 

@@ -1,4 +1,4 @@
-<%-include('.. /user/layout/userheader.ejs') -%>
+<%-include('../user/layout/userheader.ejs') -%>
 
   <!--================Home Banner Area =================-->
   <!-- breadcrumb start-->
@@ -107,8 +107,8 @@
                     <form action="/checkout" method="post">
                       <% address.forEach((addresses,index)=>{ %>
                         <div class="mt-4 p-4 border form-check">
-                          <input class="form-check-input" type="radio" value="<%=index  %> " name="index"
-                            id="flexRadioDefault1" />
+                          <input class="form-check-input" type="radio" value="<%=index%> <%= addresses._id %> "
+                            name="index" id="flexRadioDefault1" />
                           <label for="">
                             <%=addresses.fullName %>
                               <%=addresses.phone %> <br />
@@ -195,31 +195,7 @@
               <div class="order_box" style="margin-top: 1.5">
                 <h2>Your Order</h2>
 
-                <ul class="list">
-                  <!-- <li>
-                  <a href="#">Product
-                    <span>Total</span>
-                  </a>
-                </li> -->
-                  <!-- <li>
-                  <a href="#">Fresh Blackberry
-                    <span class="middle">x 02</span>
-                    <span class="last">$720.00</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">Fresh Tomatoes
-                    <span class="middle">x 02</span>
-                    <span class="last">$720.00</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">Fresh Brocoli
-                    <span class="middle">x 02</span>
-                    <span class="last">$720.00</span>
-                  </a>
-                </li> -->
-                </ul>
+
                 <ul class="list list_2">
                   <li>
                     <a href="#">Shipping
@@ -236,34 +212,26 @@
                 </ul>
 
                 <div class="payment_item">
-                  <div class="radion_btn">
-                    <input type="radio" id="f-option5" name="selector" />
-                    <label for="f-option5">Online payments</label>
-                    <div class="check"></div>
+                  <div class="mt-4 form-check">
+                    <input class="form-check-input" type="radio" value="cod" name="payment" id="cod" checked />
+                    <label class="form-check-label" for="flexRadioDefault1">
+                      Cash on Delivery
+                    </label>
                   </div>
-                  <!-- <p>
-                  Please send a check to Store Name, Store Street, Store Town,
-                  Store State / County, Store Postcode.
-                </p> -->
-                </div>
-                <div class="payment_item active">
-                  <div class="radion_btn">
-                    <input type="radio" id="f-option6" name="selector" />
-                    <label for="f-option6">COD </label>
-                    <img src="img/product/single-product/card.jpg" alt="" />
-                    <div class="check"></div>
+
+                  <div class="form-check mb-5">
+                    <input class="form-check-input" type="radio" value="Razorpay" name="payment"
+                      id="flexRadioDefault2" />
+                    <label class="form-check-label" for="flexRadioDefault2">
+                      Razorpay
+                    </label>
                   </div>
-                  <!-- <p>
-                  Please send a check to Store Name, Store Street, Store Town,
-                  Store State / County, Store Postcode.
-                </p> -->
                 </div>
-                <div class="creat_account">
-                  <input type="checkbox" id="f-option4" name="selector" />
-                  <label for="f-option4">I’ve read and accept the </label>
-                  <a href="#">terms & conditions*</a>
-                </div>
-                <a class="btn_3" href="#">Proceed to Checkout</a>
+                <hr />
+                <button type="submit" onclick="placeOrder('<%= index %>')"
+                  class="flex-c-m btn_3 stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+                  PAY NOW
+                </button>
               </div>
             </div>
           </div>
@@ -291,8 +259,67 @@
           }
         }
       </script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+      <script>
+        function placeOrder(indexof) {
+          let index = indexof;
+          let paymentMethod = document.querySelector("#cod").checked
+            ? "COD"
+            : "Razorpay";
+
+          axios
+            .get(`/payment-verify?index=${index}&paymentMethod=${paymentMethod}`)
+            .then((response) => {
+              if (response.data.payment) {
+                alert("success cash on delivery");
+                location.assign("/order-success");
+              } else {
+                alert("Razorpay")
+                razorpayPayment(response);
+              }
+            });
+          function razorpayPayment(order) {
+            alert("order")
+            console.log(order);
+            var options = {
+              key: "rzp_test_r9TZHeiPcGzoLA",
+              amount: order.data.amount,
+              currency: "INR",
+              name: "SofaWorld",
+              description: "Test Transaction",
+              image: "https://example.com/your_logo",
+              order_id: order.data.id,
+              handler: function (response) {
+                alert("verify")
+                verifyPayment(response, order);
+              },
+
+              prefill: {
+                name: "Gaurav Kumar",
+                email: "gaurav.kumar@example.com",
+                contact: "9999999999",
+              },
+              notes: {
+                address: "Razorpay Corporate Office",
+              },
+              theme: {
+                color: "#3399cc",
+              },
+            };
+            function verifyPayment(payment, order) {
+              axios
+                .post("/payment-verify", { payment, order, index })
+                .then((response) => {
+                  location.assign("/order-success");
+                });
+            }
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+          }
+        }
+      </script>
       <!--================End Checkout Area =================-->
 
-      <%-include('.. /user/layout/userfooter.ejs') -%>
+      <%-include('../user/layout/userfooter.ejs') -%>
     </div>
   </section>

@@ -8,6 +8,8 @@ const categoryModel = require('../models/categoryModel');
 const { default: mongoose } = require('mongoose');
 const { checkout } = require('../routes/User');
 const addressModel = require('../models/addressModel')
+const orderModel = require('../models/orderModel')
+const Razorpay = require('razorpay');
 
 
 //Email otp
@@ -396,35 +398,6 @@ module.exports = {
         }
     },
 
-    //Place Order
-
-    checkout: async (req,res) => {
-        try{
-            let index = Number(req.body.index);
-            if(!index) {
-                index = 0;
-            }
-            const userId = req.session.userId;
-            const addresses = await addressModel.findOne({ userId });
-            let address;
-            if (addresses) {
-                address = addresses.address;
-            } else {
-                address = [];
-            }
-            const cartItems = await cartModel.findOne({ userId });
-            if (cartItems) {
-                res.render("user/checkout", {  login: true, user: req.session.user,address,index,cartItems });
-
-            
-
-            }else{
-                res.redirect("/login");
-            }
-         } catch {
-                res.json("something wrong please try again");
-            }
-        },
    
 
 
@@ -538,8 +511,147 @@ module.exports = {
         })
 
     },
-   
+
+     //Place Order
+
+     checkout: async (req,res) => {
+        try{
+            let index = Number(req.body.index);
+            if(!index) {
+                index = 0;
+            }
+            const userId = req.session.userId;
+            const addresses = await addressModel.findOne({ userId });
+            let address;
+            if (addresses) {
+                address = addresses.address;
+            } else {
+                address = [];
+            }
+            const cartItems = await cartModel.findOne({ userId });
+            if (cartItems) {
+                res.render("user/checkout", {  login: true, user: req.session.user,address,index,cartItems });
+
+            }else{
+                res.redirect("/login");
+            }
+         } catch {
+                res.json("something wrong please try again");
+            }
+          
+                
+            },
+            
+            //order confirm
+            orderconfirm: async (req,res) =>{
+                try {
+                    const paymentMethod = req.query.paymentMethod;
+                    const userId = req.session.userId;
+                    const indexof = parseInt(req.query.index);
+                    const addresses = await addressModel.findOne({ user: userId });
+                    const address = addresses.address[indexof];
+                    const cart = await cartModel.findOne({ userId });
+                    const products = cart.items;
+                    const grandTotal = cart.cartTotal;
+                    console.log(grandTotal);
+                    let addOrder;
+                    
+                    if (paymentMethod === "COD" ) {
+                        addOrder = await orderModel({
+                            userId,
+                            products,
+                            address,
+                            grandTotal,
+                            paymentMethod,
+                          });
+                          addOrder.save();
+                          await cartModel.findOneAndDelete({ userId });
+                          res.json({ payment: "COD" });
+                        } else {
+                          var instance = new Razorpay({
+                            key_id: "rzp_test_r9TZHeiPcGzoLA",
+                            key_secret: "aqfxB6ew0ezASZJMXmhs0bS3",
+                          });
+                          const options = {
+                            amount: grandTotal * 100,
+                            currency: "INR",
+                          };
+                          instance.orders.create(options, (err, order) => {
+                            if (err) {
+                              console.log("error come orders" + err);
+                            } else {
+                              res.json(order);
+                            }
+                          });
+                        }
+                      } catch (err) {
+                        console.log(err);
+                        res.json("Something wrong, please try again");
+                      }
+                    },
+                    
+
+     //payment verification
+
+    payment: async (req, res) => {
+            try {
+      const index = parseInt(req.body.index);
+      const userId = req.session.userId;
+      const addresses = await addressModel.findOne({ userId });
+      const address = addresses.address[index];
+      const cart = await cartModel.findOne({ userId });
+      const products = cart.items;
+      const grandTotal = cart.cartTotal;
+      const crypto = require("crypto");
+      let hmac = crypto.createHmac("sha256", "QegvCVlutW7TdMqKKFVLQt1I");
+      hmac.update(
+        req.body.payment.razorpay_order_id +
+          "|" +
+          req.body.payment.razorpay_payment_id
+      );
+      hmac = hmac.digest("hex");
+      if (hmac == req.body.payment.razorpay_signature) {
+        const addOrder = await orderModel({
+          userId,
+          products,
+          address,
+          grandTotal,
+          paymentMethod: "Razorpay",
+          payment: "paid",
+        });
+        addOrder.save();
+        await cartModel.findOneAndDelete({ userId });
+        response = { valid: true };
+        res.json(response);
+      }
+    } catch {
+      res.json("Something wrong, please try again");
+    }
+  },
+
+  orderSuccess: (req, res) => {
+    res.render("user/order-success", { login: req.session.login });
+  },
+                  
+    
 }
+            
+
+            // payment: async(req,res) => {
+            //     const userId = req.session.userId;
+            //     const cart = await cartModel.findOne({ userId });
+            //     const product = cart.products;
+            //     const cartTotal = cart.cartTotal;
+            //     const now = new Date()
+            //     const deliveryDate = now.setDate(now.getDate() +7)
+              
+            // }
+            
+
+        
+
+   
+
 
 
 
