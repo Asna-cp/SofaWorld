@@ -260,6 +260,10 @@ module.exports = {
             })
     },
 
+    orderManagement: async (req,res) => {
+        res.render('/admin/allOrder')
+    },
+
 
 
 };

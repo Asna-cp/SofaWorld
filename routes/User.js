@@ -49,6 +49,10 @@ router.get('/payment-verify',controller.orderconfirm)
 router.post('/verify',controller.payment)
 router.get('/order-success',controller.orderSuccess)
 
+//Order Management
+
+router.get('/Orderpage',controller.orderpage)
+
 
 
 //Email otp verification

@@ -1,0 +1,137 @@
+
+
+
+<%-include('../user/layout/userheader.ejs') -%>
+
+  
+
+<!--================Home Banner Area =================-->
+<!-- breadcrumb start-->
+<section class="breadcrumb breadcrumb_bg">
+ <div class="container">
+   <div class="row justify-content-center">
+     <div class="col-lg-8">
+       <div class="breadcrumb_iner">
+         <div class="breadcrumb_iner_item">
+           <h2>View Orders</h2>
+           <p>Home <span>-</span>All Orders</p>
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
+</section>
+<!-- breadcrumb start-->
+
+<!--================Cart Area =================-->
+<section class="cart_area padding_top">
+ <div class="container">
+   <div class="cart_inner">
+   
+     <div class="table-responsive">
+       <table class="table">
+         <thead>
+           <tr>
+             <th scope="col">Product</th>
+             <th scope="col">Name</th>
+
+             <th scope="col">Price</th>
+             <th scope="col" class="text-center">Quantity</th>
+             <th scope="col">Total</th>
+             <th scope="col">Status</th>
+             <th scope="col">Expected Date</th>
+             <th scope="col">Update</th>
+           </tr>
+         </thead>
+         <tbody>
+           <% orders.forEach((order) =>  { %>
+           <% for(prod of order.productIds ) { %>
+           
+                    <tr>
+             <td>
+            
+           <img src="/images/<%= prod.productId.image %>" style="width: 100px; height: 100px;" alt="" />
+
+              </td> 
+               
+              <td>
+                 <div class="media-body">
+                   <p><%= prod.productId?.productName %></p>
+                 </div>
+               </td>
+             
+             <td>
+               <h5><%= prod.productId?.price %></h5>
+             </td>
+             <td class="text-center">
+              <h5><%= prod.productId?.quantity %></h5>
+            </td>
+           
+            
+                   <td>
+              <h5>₹<%= prod.total %></h5>
+             
+             </td>
+             <td>
+              <h5><%= prod.status %></h5>
+            </td>
+            <td>
+              <h5><%=  moment(expected_delivery_date).format('llll') %></h5>
+            </td>
+            <td>
+             
+          </form>
+          
+         </td>
+
+           </tr>
+          
+           <% }}) %>
+         
+         
+         </tbody>
+       </table>
+        </div>
+
+   </div>
+</section>
+<!--================End Cart Area =================-->
+
+
+<%-include('../user/layout/userfooter.ejs') -%>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

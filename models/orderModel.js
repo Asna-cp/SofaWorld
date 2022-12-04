@@ -18,6 +18,10 @@ const orderSchema = new mongoose.Schema({
             type:Number,
             default:1
         },
+        status: {
+            type: String,
+            default: "Order Confirmed",
+          },
 
         total: 
         {type:Number}

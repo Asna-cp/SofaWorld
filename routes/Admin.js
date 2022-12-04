@@ -52,7 +52,7 @@ router.post('/editproduct/:id', controller.editproduct)
 
 
 
-
+router.get('/allOrders',controller.orderManagement)
 
 
 

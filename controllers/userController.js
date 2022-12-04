@@ -10,7 +10,7 @@ const { checkout } = require('../routes/User');
 const addressModel = require('../models/addressModel')
 const orderModel = require('../models/orderModel')
 const Razorpay = require('razorpay');
-
+const moment = require("moment");
 
 //Email otp
 
@@ -204,8 +204,6 @@ module.exports = {
             else {
                 list = []
             }
-
-            console.log(list);
 
             res.render('user/productpage', { login: true, user: req.session.user, products, userId, list })
         } else {
@@ -585,7 +583,7 @@ module.exports = {
                           });
                         }
                       } catch (err) {
-                        console.log(err);
+                      
                         res.json("Something wrong, please try again");
                       }
                     },
@@ -595,16 +593,15 @@ module.exports = {
 
     payment: async (req, res) => {
             try {
-                console.log("payment");
+
       const index = parseInt(req.body.index);
       const userId = req.session.userId;
       const addresses = await addressModel.findOne({ userId });
       const address = addresses.address[index];
       const cart = await cartModel.findOne({ userId });
-      const productIds = cart.items;
+      const productIds = cart.productIds;
       const grandTotal = cart.cartTotal;
       const crypto = require("crypto");
-      console.log(req.body);
       let hmac = crypto.createHmac("sha256", "aqfxB6ew0ezASZJMXmhs0bS3");
       hmac.update(
         req.body.payment.razorpay_order_id +
@@ -612,11 +609,7 @@ module.exports = {
           req.body.payment.razorpay_payment_id
       );
       hmac = hmac.digest("hex");
-      console.log( req.body.payment.razorpay_order_id );
-      console.log(  req.body.payment.razorpay_payment_id);
-      console.log(hmac);
       if (hmac == req.body.payment.razorpay_signature) {
-        console.log("if");
         const addOrder = await orderModel({
           userId,
           productIds,
@@ -630,7 +623,7 @@ module.exports = {
         response = { valid: true };
         res.json(response);
       }else{
-        console.log("else");
+        alert("Sorry ,try again")
       }
     } catch {
       res.json("Something wrong, please try again");
@@ -640,9 +633,32 @@ module.exports = {
   orderSuccess: (req, res) => {
     res.render("user/orderSuccess", { login: req.session.login });
   },
+
+  //view Orders
+
+  orderpage: async (req,res) => {
+    try {
+        
+        //expected Date
+        const now = new Date();
+        const expected_delivery_date = now.setDate(now.getDate() + 7);
+
+        const userId = req.session.userId;
+
+        const orders = await orderModel.find({ userId })
+        .populate("productIds.productId")
+
+        res.render('user/Orderpage',{ login: req.session.login, orders, moment, expected_delivery_date })
+
+    } catch (err) {
+        console.log(err);
+        res.json("please try again");
+    }
+    },
+}
                   
     
-}
+
             
 
             // payment: async(req,res) => {
