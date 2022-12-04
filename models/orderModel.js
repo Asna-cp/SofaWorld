@@ -23,7 +23,7 @@ const orderSchema = new mongoose.Schema({
         {type:Number}
     }],
 
-     address : [{
+     address : {
         fullName : {
             type: String,
             required: true
@@ -47,8 +47,8 @@ const orderSchema = new mongoose.Schema({
         state : {
             type : String,
             required : true
-        }
-    }],  
+        }, 
+    },
 
     grandTotal: {
         type: String,
@@ -66,9 +66,12 @@ const orderSchema = new mongoose.Schema({
         type: String,
         default: "unpaid"
     },
+
+
+})
   
 
-});
+
 
 
 module.exports = orderModel = mongoose.model("Orders", orderSchema)

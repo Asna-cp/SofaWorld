@@ -277,7 +277,7 @@ module.exports = {
     cart: async (req, res) => {
 
         const userId = req.session.userId;
-
+        let cartTotal = null;
         const cartlist = await cartModel.findOne({ userId }).populate("productIds.productId");
 
         if (cartlist != null) {
@@ -288,7 +288,7 @@ module.exports = {
                 res.render('user/cart', { login: true, user: req.session.user, cart, cartlist, cartTotal })
             }
         } else {
-            res.render('user/cart', { login: false, cart: [],cartlist,cartTotal})
+            res.render('user/cart', { login: false, cart: [], cartlist, cartTotal })
         }
     },
 
@@ -545,21 +545,21 @@ module.exports = {
             //order confirm
             orderconfirm: async (req,res) =>{
                 try {
+                
                     const paymentMethod = req.query.paymentMethod;
                     const userId = req.session.userId;
                     const indexof = parseInt(req.query.index);
                     const addresses = await addressModel.findOne({ user: userId });
                     const address = addresses.address[indexof];
                     const cart = await cartModel.findOne({ userId });
-                    const products = cart.items;
+                    const productIds = cart.items;
                     const grandTotal = cart.cartTotal;
-                    console.log(grandTotal);
                     let addOrder;
                     
                     if (paymentMethod === "COD" ) {
                         addOrder = await orderModel({
                             userId,
-                            products,
+                            productIds,
                             address,
                             grandTotal,
                             paymentMethod,
@@ -573,12 +573,12 @@ module.exports = {
                             key_secret: "aqfxB6ew0ezASZJMXmhs0bS3",
                           });
                           const options = {
-                            amount: grandTotal * 100,
+                            amount: grandTotal ,
                             currency: "INR",
                           };
                           instance.orders.create(options, (err, order) => {
                             if (err) {
-                              console.log("error come orders" + err);
+                              console.log(err);
                             } else {
                               res.json(order);
                             }
@@ -595,25 +595,31 @@ module.exports = {
 
     payment: async (req, res) => {
             try {
+                console.log("payment");
       const index = parseInt(req.body.index);
       const userId = req.session.userId;
       const addresses = await addressModel.findOne({ userId });
       const address = addresses.address[index];
       const cart = await cartModel.findOne({ userId });
-      const products = cart.items;
+      const productIds = cart.items;
       const grandTotal = cart.cartTotal;
       const crypto = require("crypto");
-      let hmac = crypto.createHmac("sha256", "QegvCVlutW7TdMqKKFVLQt1I");
+      console.log(req.body);
+      let hmac = crypto.createHmac("sha256", "aqfxB6ew0ezASZJMXmhs0bS3");
       hmac.update(
         req.body.payment.razorpay_order_id +
           "|" +
           req.body.payment.razorpay_payment_id
       );
       hmac = hmac.digest("hex");
+      console.log( req.body.payment.razorpay_order_id );
+      console.log(  req.body.payment.razorpay_payment_id);
+      console.log(hmac);
       if (hmac == req.body.payment.razorpay_signature) {
+        console.log("if");
         const addOrder = await orderModel({
           userId,
-          products,
+          productIds,
           address,
           grandTotal,
           paymentMethod: "Razorpay",
@@ -623,6 +629,8 @@ module.exports = {
         await cartModel.findOneAndDelete({ userId });
         response = { valid: true };
         res.json(response);
+      }else{
+        console.log("else");
       }
     } catch {
       res.json("Something wrong, please try again");

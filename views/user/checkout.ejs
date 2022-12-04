@@ -308,7 +308,7 @@
             };
             function verifyPayment(payment, order) {
               axios
-                .post("/payment-verify", { payment, order, index })
+                .post("/verify", { payment, order, index })
                 .then((response) => {
                   location.assign("/order-success");
                 });

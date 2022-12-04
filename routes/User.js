@@ -46,7 +46,7 @@ router.post('/deleteAddress/:id',controller.deleteAddress)
 //checkout
 router.post('/checkout',controller.checkout)
 router.get('/payment-verify',controller.orderconfirm)
-router.post('/checkout',controller.payment)
+router.post('/verify',controller.payment)
 router.get('/order-success',controller.orderSuccess)
 
 
