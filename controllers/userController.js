@@ -288,7 +288,7 @@ module.exports = {
                 res.render('user/cart', { login: true, user: req.session.user, cart, cartlist, cartTotal })
             }
         } else {
-            res.render('user/cart', { login: false, cart: [] })
+            res.render('user/cart', { login: false, cart: [],cartlist,cartTotal})
         }
     },
 
@@ -407,7 +407,7 @@ module.exports = {
         // let brand = await brandModel.find();
         let users = await UserModel.findOne({ _id: userId });
         let address = await addressModel.findOne({ userId: userId })
-        console.log(users+"-------user")
+    
         
 
         if (address) {
@@ -630,7 +630,7 @@ module.exports = {
   },
 
   orderSuccess: (req, res) => {
-    res.render("user/order-success", { login: req.session.login });
+    res.render("user/orderSuccess", { login: req.session.login });
   },
                   
     

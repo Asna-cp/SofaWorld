@@ -41,6 +41,7 @@ router.get('/checkout', controller.checkout)
 router.get('/profile', controller.profile)
 router.get('/addaddress', controller.addaddress)
 router.post('/addnewaddress', controller.newaddress)
+router.post('/deleteAddress/:id',controller.deleteAddress)
 
 //checkout
 router.post('/checkout',controller.checkout)

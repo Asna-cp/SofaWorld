@@ -111,10 +111,10 @@
                             name="index" id="flexRadioDefault1" />
                           <label for="">
                             <%=addresses.fullName %>
-                              <%=addresses.phone %> <br />
-                                <%=addresses.addressLine %> , <%=addresses.landMark %> ,
-                                    <%=addresses.city %>, <%=addresses.state %> ,
-                                        <%=addresses.pincode %>
+                            <%=addresses.phone %> <br />
+                            <%=addresses.addressLine %> , <%=addresses.landMark %> ,
+                            <%=addresses.city %>, <%=addresses.state %> ,
+                            <%=addresses.pincode %>
                           </label>
                         </div>
                         <% }) %>
@@ -136,7 +136,7 @@
                     <div class="mb-5card-header py-3">
                       <h5 class="mtext-101 mb-0">Address details</h5>
                     </div>
-                    <form action="/address" method="post">
+                    <form action="/checkout" method="post">
                       <div class="row mb-4">
                         <div class="col">
                           <div class="form-outline">
@@ -274,12 +274,12 @@
                 alert("success cash on delivery");
                 location.assign("/order-success");
               } else {
-                alert("Razorpay")
+              
                 razorpayPayment(response);
               }
             });
           function razorpayPayment(order) {
-            alert("order")
+    
             console.log(order);
             var options = {
               key: "rzp_test_r9TZHeiPcGzoLA",
@@ -290,7 +290,7 @@
               image: "https://example.com/your_logo",
               order_id: order.data.id,
               handler: function (response) {
-                alert("verify")
+              
                 verifyPayment(response, order);
               },
 
