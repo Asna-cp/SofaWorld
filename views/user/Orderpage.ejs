@@ -67,9 +67,7 @@
              <td class="text-center">
               <h5><%= prod.productId?.quantity %></h5>
             </td>
-           
-            
-                   <td>
+           <td>
               <h5>₹<%= prod.total %></h5>
              
              </td>
@@ -81,18 +79,14 @@
             </td>
             <td> 
                   
-              <form action="/cancelOrder/<%= prod.productId?._id %>/<%= prod.productId?.price %>/<%= prod.quantity %>" method="post">
+              <form action="/cancelOrder/<%= prod.productId?._id %>/<%= order._id %>" method="post">
                
              <button type="submit"  class="btn btn-outline-dark">Cancel</button>
           </form>
          </td>
          <td> 
-                  
-          
             <a class="btn btn-outline-dark" href="/invoice">Invoice</a>
-           
-       
-      </form>
+           </form>
      </td>
             <td>
              

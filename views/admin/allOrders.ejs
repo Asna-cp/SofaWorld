@@ -104,7 +104,7 @@
   <main class="app-content">
     <div class="app-title">
       <div>
-        <h1><i class="fa fa-dashboard"></i> View Products</h1>
+        <h1><i class="fa fa-dashboard"></i> View Orders</h1>
 
       </div>
       <ul class="app-breadcrumb breadcrumb">
@@ -123,7 +123,7 @@
     <body>
 
       <div class="card mt-2 mx-4 ">
-        <h5 class="card-header">All Products</h5>
+        <h5 class="card-header">All Orders</h5>
 
         <div class="table-responsive text-nowrap">
           <table class="table table-dark table-striped">
@@ -134,8 +134,10 @@
                 <!-- <th scope="col">Type</th> -->
                 <!-- <th scope="col">Seating</th> -->
                 <th scope="col">Quantity</th>
-                <th scope="col">Expected Date</th>
+                <th scope="col"class="text-center">Expected Date</th>
                 <th scope="col">Price</th>
+                <th scope="col">Payment Method</th>
+                <th scope="col">Payment</th>
                 <th scope="col">Image</th>
                 <th scope="col">status</th>
 
@@ -154,33 +156,71 @@
                     </td>
                    
                   
-                    <td>
+                    <td class="text-center">
                       <%= prod.productId?.quantity %>
                     </td>
                     <td>
-                      <h5><%=  moment(expected_delivery_date).format('llll') %></h5>
+                      <p><%= moment(expected_delivery_date).format('llll') %></p>
                     </td>
                     <td>
                       <%= prod.productId?.price %>
+                    </td>
+                    <td class="text-center">
+                      <%= order?.paymentMethod %>
+                    </td>
+                    <td>
+                      <%= order?.payment %>
                     </td>
                     <td><img src="/images/<%= prod.productId?.image %>" alt="" style="height: 50px; width: 60px;"></td>
 
                
                     
                         <td>
-                          <h5><%= prod.status %></h5>
-                        </td>
-                      
-         
+                          <% if (prod.status=='Order Confirmed' ){ %>
+                            <button type="button" onclick="changeStatus('<%= prod.status %>','<%= order._id %>','<%=prod.productId._id %>')"
+                              class="btn btn-success">Order Confirmed</button>
 
-                  </tr>
+                              <% }else if(prod.status=='Packed') { %>
+                              <button type="button" onclick="changeStatus('<%= prod.status %>','<%= order._id %>','<%= prod.productId._id %>')"
+                                class="btn btn-primary">Packed</button>
+
+                                <% }else if(prod.status=='Shipping') { %>
+                                  <button type="button" onclick="changeStatus('<%= prod.status %>','<%= order._id %>','<%= prod.productId._id %>')"
+                                    class="btn btn-secondary">Shipping</button>
+
+                                    <% }else if(prod.status=='Delivered') { %>
+                                      <button type="button" onclick="changeStatus('<%= prod.status %>','<%= order._id %>','<%= prod.productId._id %>')"
+                                        class="btn btn-success">Delivered</button>
+                              
+
+                                         <% }else{ %> <button
+                                          type="button"
+                                          class="btn btn-danger"
+                                        > Canceled
+                                      </button>
+                                      <% } %>
+        
+                                           
+                      </td>
+                     </tr>
                   <% }}) %>
 
             </tbody>
           </table>
         </div>
       </div>
-     
+      <script>
+        function changeStatus(status, orderId, prodId) {
+          
+        
+          axios.post("/admin/allOrders", { status, orderId, prodId }).then(() => {
+            
+
+            window.location.reload();
+          });
+        }
+      </script>
+      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
  
 

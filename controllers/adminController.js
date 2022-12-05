@@ -6,6 +6,8 @@ const UserModel = require('../models/userModel');
 const bannerModel = require('../models/bannerModel');
 const orderModel = require('../models/orderModel');
 const moment = require("moment");
+const addressModel = require('../models/addressModel')
+const Razorpay = require('razorpay');
 
 
 
@@ -266,14 +268,52 @@ module.exports = {
         const now = new Date();
         const expected_delivery_date = now.setDate(now.getDate() + 7);
         const userId = req.session.userId;
-        const orders = await orderModel.find({ userId })
+        const orders = await orderModel.find({ })
         .populate('productIds.productId')
+       
         res.render('admin/allOrders', { login: req.session.login, orders, moment, expected_delivery_date })
     },
+
+    //change status
+
+    changeStatus: async (req,res) => {
+        const { status, orderId, prodId } = req.body;
+        console.log(req.body);
+        if (status == 'Order Confirmed') {
+            await orderModel.findOneAndUpdate(
+                { _id:orderId,"productIds.productId": prodId },{
+                    $set: { "productIds.$.status": "Packed" },
+                }
+            );
+        } else if (status == "Packed") {
+            await orderModel.findOneAndUpdate(
+                { orderId, "productIds.productId": prodId },
+                {
+                    $set: { "productIds.$.status": "Shipping" },  
+                }
+            );
+        } else if (status == "Shipping") {
+            await orderModel.findOneAndUpdate(
+                { orderId, "productIds.productId": prodId },
+                {
+                    $set: { "productIds.$.status": "Delivered" },  
+                }
+            );
+    }  else {
+        await orderModel.findOneAndUpdate(
+            { orderId, "productIds.productId": prodId },
+            {
+                $set: { "productIds.$.status": "Canceled" },  
+            }
+        );
+    }
+    res.json()
    
 
 
-};
+
+    }
+}
 
 
 

@@ -53,6 +53,7 @@ router.post('/editproduct/:id', controller.editproduct)
 
 
 router.get('/allOrders',controller.orderManagement)
+router.post('/allOrders',controller.changeStatus)
 
 
 

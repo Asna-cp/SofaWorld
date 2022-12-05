@@ -195,8 +195,20 @@ module.exports = {
         if (req.session.userLogin) {
             const products = await productModel.find({}).populate('type', 'categoryName').lean()
             const userId = req.session.userId;
-
-
+            
+            
+            let list = await wishlistModel.findOne({ userId }).populate('productIds')
+            if (list != null) {
+                list = list.productIds
+            }
+            else {
+                list = []
+            }
+            
+            res.render('user/productpage', { login: true, user: req.session.user, products, userId, list })
+        } else {
+            const userId = req.session.userId;
+            const products = await productModel.find({}).populate('type', 'categoryName').lean()
             let list = await wishlistModel.findOne({ userId }).populate('productIds')
             if (list != null) {
                 list = list.productIds
@@ -205,10 +217,7 @@ module.exports = {
                 list = []
             }
 
-            res.render('user/productpage', { login: true, user: req.session.user, products, userId, list })
-        } else {
-
-            res.render('user/home', { login: false });
+            res.render('user/productpage', { login: false, products,list })
         }
 
     },
@@ -547,10 +556,10 @@ module.exports = {
                     const paymentMethod = req.query.paymentMethod;
                     const userId = req.session.userId;
                     const indexof = parseInt(req.query.index);
-                    const addresses = await addressModel.findOne({ user: userId });
+                    const addresses = await addressModel.findOne({userId });
                     const address = addresses.address[indexof];
                     const cart = await cartModel.findOne({ userId });
-                    const productIds = cart.items;
+                    const productIds = cart.productIds;
                     const grandTotal = cart.cartTotal;
                     let addOrder;
                     
@@ -644,11 +653,13 @@ module.exports = {
         const expected_delivery_date = now.setDate(now.getDate() + 7);
 
         const userId = req.session.userId;
+       
 
         const orders = await orderModel.find({ userId })
         .populate("productIds.productId")
+       
 
-        res.render('user/Orderpage',{ login: req.session.login, orders, moment, expected_delivery_date })
+        res.render('user/Orderpage',{ login: req.session.login, orders, moment,  expected_delivery_date })
 
     } catch (err) {
         console.log(err);
@@ -658,16 +669,16 @@ module.exports = {
 
     cancelOrder: async (req, res) => {
         
-            const itemId = req.params.itemId;
+            const itemId = req.params.proId;
             const orderId = req.params.orderId;
             let canceled_date = new Date();
             await orderModel.updateOne(
-              { _id: orderId, "products._id": itemId },
+              { _id: orderId, "productIds.productId": itemId },
               {
                 $set: {
                   canceled_date,
-                  delivered_date: "",
-                  "products.$.status": "Canceled",
+                 
+                  "productIds.$.status": "Canceled",
                 },
               }
             );
@@ -687,9 +698,7 @@ module.exports = {
                 const address = order.address;
                 res.render('user/invoice',{  login: req.session.login, order, products, address, moment });
 
-
-
-            },
+            },                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
        
 
 }

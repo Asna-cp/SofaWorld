@@ -11,7 +11,7 @@ const userSession = require('../middleware/auth')
 router.get('/', controller.home)
 router.get('/loginpage', controller.signin)
 router.get('/logout', controller.logout)
-router.get('/productpage', userSession.userSession, controller.productpage)
+router.get('/productpage', controller.productpage)
 
 router.get('/productdetails/:id', userSession.userSession, controller.productdetails)
 router.get('/category/:id', controller.categorylisting)
@@ -23,7 +23,7 @@ router.post('/removewishlistproduct/:id', userSession.userSession, controller.re
 
 //CART
 //router.get('/cart',controller.cart)
-router.get('/addtocart/:proId', controller.addtocart)
+router.get('/addtocart/:proId',userSession.userSession, controller.addtocart)
 router.post('/removecartproduct/:id/:price/:quantity', controller.removecartproduct)
 router.post('/wishlistaddcart/:id', controller.wishlistaddcart)
 
@@ -38,7 +38,7 @@ router.get('/checkout', controller.checkout)
 
 
 //User profile
-router.get('/profile', controller.profile)
+router.get('/profile',userSession.userSession,controller.profile)
 router.get('/addaddress', controller.addaddress)
 router.post('/addnewaddress', controller.newaddress)
 router.post('/deleteAddress/:id',controller.deleteAddress)
@@ -52,7 +52,7 @@ router.get('/order-success',controller.orderSuccess)
 //Order Management
 
 router.get('/Orderpage',controller.orderpage)
-router.post('/cancelOrder/:id',controller.cancelOrder)
+router.post('/cancelOrder/:proId/:orderId',controller.cancelOrder)
 
 router.get('/invoice',controller.Invoice)
 

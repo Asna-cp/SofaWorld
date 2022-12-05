@@ -108,22 +108,22 @@
             </div>
             <hr>
 
-            <% products.forEach((pro,count)=>{ %>
+            <% products.forEach((prod,count)=>{ %>
                 <div class="row mt-2 p-2">
                     <div class="col-2">
                         <%=count+=1 %>
                     </div>
                     <div class="col-4 font-monospace">
-                        <%= pro.product.productName %>
+                        <%= prod.productId.productName %>
                     </div>
                     <div class="col-2">
-                        <%= pro.product.price %>
+                        <%= prod.productId.price %>
                     </div>
                     <div class="col-2">
-                        <%= pro.quantity %>
+                        <%= prod.quantity %>
                     </div>
                     <div class="col-2">
-                        <%= pro.total %>
+                        <%= prod.total %>
                     </div>
                 </div>
                 <% }) %>
