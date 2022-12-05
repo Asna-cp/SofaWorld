@@ -4,6 +4,8 @@ const CategoryModel = require('../models/categoryModel');
 const ProductModel = require('../models/productModel');
 const UserModel = require('../models/userModel');
 const bannerModel = require('../models/bannerModel');
+const orderModel = require('../models/orderModel');
+const moment = require("moment");
 
 
 
@@ -261,9 +263,14 @@ module.exports = {
     },
 
     orderManagement: async (req,res) => {
-        res.render('/admin/allOrder')
+        const now = new Date();
+        const expected_delivery_date = now.setDate(now.getDate() + 7);
+        const userId = req.session.userId;
+        const orders = await orderModel.find({ userId })
+        .populate('productIds.productId')
+        res.render('admin/allOrders', { login: req.session.login, orders, moment, expected_delivery_date })
     },
-
+   
 
 
 };

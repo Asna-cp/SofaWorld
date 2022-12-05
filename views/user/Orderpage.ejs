@@ -41,6 +41,7 @@
              <th scope="col">Status</th>
              <th scope="col">Expected Date</th>
              <th scope="col">Update</th>
+             <th scope="col">Invoice</th>
            </tr>
          </thead>
          <tbody>
@@ -78,6 +79,21 @@
             <td>
               <h5><%=  moment(expected_delivery_date).format('llll') %></h5>
             </td>
+            <td> 
+                  
+              <form action="/cancelOrder/<%= prod.productId?._id %>/<%= prod.productId?.price %>/<%= prod.quantity %>" method="post">
+               
+             <button type="submit"  class="btn btn-outline-dark">Cancel</button>
+          </form>
+         </td>
+         <td> 
+                  
+          
+            <a class="btn btn-outline-dark" href="/invoice">Invoice</a>
+           
+       
+      </form>
+     </td>
             <td>
              
           </form>

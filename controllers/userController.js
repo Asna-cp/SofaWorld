@@ -319,7 +319,7 @@ module.exports = {
 
     removecartproduct: async (req, res) => {
         const userId = req.session.userId;
-        console.log(userId);
+       
         const productId = req.params.id;
         const price = req.params.price
         const quantity = req.params.quantity
@@ -638,7 +638,7 @@ module.exports = {
 
   orderpage: async (req,res) => {
     try {
-        
+
         //expected Date
         const now = new Date();
         const expected_delivery_date = now.setDate(now.getDate() + 7);
@@ -655,6 +655,43 @@ module.exports = {
         res.json("please try again");
     }
     },
+
+    cancelOrder: async (req, res) => {
+        
+            const itemId = req.params.itemId;
+            const orderId = req.params.orderId;
+            let canceled_date = new Date();
+            await orderModel.updateOne(
+              { _id: orderId, "products._id": itemId },
+              {
+                $set: {
+                  canceled_date,
+                  delivered_date: "",
+                  "products.$.status": "Canceled",
+                },
+              }
+            );
+            res.redirect("/Orderpage");
+          
+            },
+
+
+            //INVOICE
+
+            Invoice: async( req,res) => {
+                const orderId = req.params.orderId;
+                const order = await orderModel.findOne({ orderId })
+                .populate("productIds.productId")
+            
+                const products = order.productIds;
+                const address = order.address;
+                res.render('user/invoice',{  login: req.session.login, order, products, address, moment });
+
+
+
+            },
+       
+
 }
                   
     

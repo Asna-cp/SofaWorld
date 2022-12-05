@@ -131,10 +131,10 @@
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Type</th>
-                <th scope="col">Seating</th>
+                <!-- <th scope="col">Type</th> -->
+                <!-- <th scope="col">Seating</th> -->
                 <th scope="col">Quantity</th>
-                <th scope="col">description</th>
+                <th scope="col">Expected Date</th>
                 <th scope="col">Price</th>
                 <th scope="col">Image</th>
                 <th scope="col">status</th>
@@ -142,78 +142,45 @@
               </tr>
             </thead>
             <tbody>
-              <% products.forEach(function(product){ %>
-                <% console.log(product) %>
+              <% orders.forEach((order) => { %> 
+              <% for(prod of order.productIds ) { %>
+              
                   <tr>
                     <th scope="row">
-                      <%= index++ %>
+                   
                     </th>
                     <td>
-                      <%= product?.productName %>
+                      <%= prod.productId?.productName %>
+                    </td>
+                   
+                  
+                    <td>
+                      <%= prod.productId?.quantity %>
                     </td>
                     <td>
-                      <%= product?.type?.categoryName %>
+                      <h5><%=  moment(expected_delivery_date).format('llll') %></h5>
                     </td>
                     <td>
-                      <%= product?.seating %>
+                      <%= prod.productId?.price %>
                     </td>
-                    <td>
-                      <%= product?.quantity %>
-                    </td>
-                    <td>
-                      <%= product?.discription %>
-                    </td>
-                    <td>
-                      <%= product?.price %>
-                    </td>
-                    <td><img src="/images/<%= product?.image %>" alt="" style="height: 50px; width: 60px;"></td>
+                    <td><img src="/images/<%= prod.productId?.image %>" alt="" style="height: 50px; width: 60px;"></td>
 
-                    <td>
-                      <div>
-                        <% if (product?.update==false) { %>
-                          <form action="/admin/listProduct/<%= product?._id %>" method="post">
-                            <button type="submit" class="btn btn-danger" style="width: 100px;">List</button>
-                          </form>
-                          <% } else { %>
-                            <form action="/admin/unlistProduct/<%= product._id %>" method="post">
-                              <button type="submit" class="btn btn-success" style="width: 100px;">UnList</button>
-                            </form>
-                           <% } %>
-
-                              <br>
-                              <form action="/admin/editproduct/<%= product?._id %>" method="post">
-                                <button type="submit" class="btn btn-primary" style="width: 100px;">Edit</button>
-                              </form>
-
-
-                      </div>
-
-                    </td>
+               
+                    
+                        <td>
+                          <h5><%= prod.status %></h5>
+                        </td>
+                      
+         
 
                   </tr>
-                  <% }) %>
+                  <% }}) %>
 
             </tbody>
           </table>
         </div>
       </div>
-      <section class="d-flex justify-content-center mt-2">
-        <% if(hasPreviousPage){ %>
-          <a style="text-decoration: none;padding: .5rem; margin:0 1rem; color:black" class="text-center"
-          href="/admin/viewproducts?page=<%= PreviousPage %>"><i class="fa fa-chevron-left"
-            aria-hidden="true"></i></a>
-       <% } %>
-       <a style="text-decoration: none;padding: .5rem; margin:0 1rem; color:black; border: 1px solid black;"
-       href="/admin/viewproducts?page=<%= page %>">
-         <%= page %>
-       </a>
-       <% if(hasNextPage) { %>
-        <a style="text-decoration: none;padding: .5rem; margin:0 1rem; color:black"
-        href="/admin/viewproducts?page=<%= page+1 %>"><i class="fa fa-chevron-right"
-          aria-hidden="true"></i></a>
-      <% } %>
-
-         </section>
+     
 
  
 
