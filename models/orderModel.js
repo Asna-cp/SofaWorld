@@ -12,9 +12,11 @@ const orderSchema = new mongoose.Schema({
         productId:
         {
             type:Objectid,
-            ref: 'ProductData'
+            ref: 'ProductData',
+            required:true,
         },
         quantity:{
+            required:true,
             type:Number,
           
         },
