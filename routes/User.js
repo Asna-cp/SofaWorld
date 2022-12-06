@@ -12,6 +12,7 @@ router.get('/', controller.home)
 router.get('/loginpage', controller.signin)
 router.get('/logout', controller.logout)
 router.get('/productpage', controller.productpage)
+router.post('/verify-otp',controller.verifyotp)
 
 router.get('/productdetails/:id', userSession.userSession, controller.productdetails)
 router.get('/category/:id', controller.categorylisting)
