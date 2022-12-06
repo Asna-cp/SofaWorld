@@ -85,7 +85,7 @@ app.use("/admin", adminRoute);
 
 
 // Start Server
-app.listen(8002, () => {
+app.listen(3000, () => {
     console.log('Server Started')
 })
 
