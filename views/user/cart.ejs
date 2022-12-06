@@ -1,11 +1,8 @@
-
-
-
 <%-include('../user/layout/userheader.ejs') -%>
 
-  
 
-   <!--================Home Banner Area =================-->
+
+  <!--================Home Banner Area =================-->
   <!-- breadcrumb start-->
   <section class="breadcrumb breadcrumb_bg">
     <div class="container">
@@ -27,143 +24,114 @@
   <section class="cart_area padding_top">
     <div class="container">
       <div class="cart_inner">
-      
-        <% if (cart.length == 0) { %> 
-          <div class="col-12 text-center">
-            <img src="https://ibellstore.com/images/no-item-found-here.png" alt="no order" style="width: 400px; height:300px ;">
-          </div>
-        <% } else { %> 
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Product</th>
-                <th scope="col">Price</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Total</th>
-                <th scope="col">Update</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% cart.forEach(function(product){ %>
-              <% console.log(product) %>
-              <tr>
-                <td>
-                  <div class="media">
-                    <div class="d-flex">
-                      <img src="/images/<%= product?.productId?.image %>" style="width: 200px; height: 200px;" alt="" />
-                    </div>
-                    <div class="media-body">
-                      <p><%= product.productId?.productName %></p>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <h5>₹<%= product.productId?.price %></h5>
-                </td>
-                
-                <td>
-                   
-                  <div class="qty-label">
-                    <div class="input-number"> 
-                      
-                            <a class="qty-up" href="/button-increment/<%=product.productId?._id %>" >+</a>
-                               
-                                            <input id="itemQty-<%= product.productId?.id %>" type="text"
-                                                value="<%= product.quantity %>"
-                                                style="height: 40px; width: 30px; border: none;">
-                                            <a class="qty-down" href="/button-decrement/<%= product.productId?._id %>">-</a>
-                                               
-                                     </div>
-                               </div>
-                           </td>
-                      <td>
-                        <h5>₹<%= product.total %></h5>
-                
-                </td>
-              <td> 
-                  
-                 <form action="/removecartproduct/<%= product.productId?._id %>/<%= product.productId?.price %>/<%= product.quantity %> " method="post">
-                  
-                <button type="submit"  class="btn btn-outline-dark">Remove</button>
-             </form>
-            </td>
-            
 
-              </tr>
-             
-              <% }) %>
-              <tr class="bottom_button">
-                <!-- <td>
+        <% if (cart.length==0) { %>
+          <div class="col-12 text-center">
+            <img src="https://ibellstore.com/images/no-item-found-here.png" alt="no order"
+              style="width: 400px; height:300px ;">
+          </div>
+          <% } else { %>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Update</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% cart.forEach(function(product){ %>
+                    <% console.log(product) %>
+                      <tr>
+                        <td>
+                          <div class="media">
+                            <div class="d-flex">
+                              <img src="/images/<%= product?.productId?.image %>" style="width: 200px; height: 200px;"
+                                alt="" />
+                            </div>
+                            <div class="media-body">
+                              <p>
+                                <%= product.productId?.productName %>
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <h5>₹<%= product.productId?.price %>
+                          </h5>
+                        </td>
+
+                        <td>
+
+                          <div class="qty-label">
+                            <div class="input-number">
+
+                              <a class="qty-down" href="/button-decrement/<%= product.productId?._id %>">-</a>
+
+                              <input id="itemQty-<%= product.productId?.id %>" type="text"
+                                value="<%= product.quantity %>" style="height: 40px; width: 15px; border: none;">
+
+                              <a class="qty-up" href="/button-increment/<%=product.productId?._id %>">+</a>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <h5>₹<%= product.total %>
+                          </h5>
+
+                        </td>
+                        <td>
+
+                          <form
+                            action="/removecartproduct/<%= product.productId?._id %>/<%= product.productId?.price %>/<%= product.quantity %> "
+                            method="post">
+
+                            <button type="submit" class="btn btn-outline-dark">Remove</button>
+                          </form>
+                        </td>
+
+
+                      </tr>
+
+                      <% }) %>
+                        <tr class="bottom_button">
+                          <!-- <td>
                   <a class="btn_1" href="#">Update Cart</a>
                 </td> -->
-                <td></td>
-                <td></td>
-                <td>
-                  <!-- <div class="cupon_text float-right">
+                          <td></td>
+                          <td></td>
+                          <td>
+                            <!-- <div class="cupon_text float-right">
                     <a class="btn_1" href="#">Close Coupon</a>
                   </div> -->
-                </td>
-              </tr>
-              <tr>
-                <td></td>
-                <td></td>
-                <td>
-                  <h5>Cart Total</h5>
-                </td>
-                <td>
-                  <h5>₹<%= cartTotal %></h5>
-                </td>
-              </tr>
-            
-            </tbody>
-          </table>
-          <div class="checkout_btn_inner float-right">
-            <!-- <a class="btn_1" href="/productpage">Continue Shopping</a> -->
-            <a class="btn_1 checkout_btn_1" href="/checkout">Proceed to checkout</a>
-          </div>
-        </div>
-      <% } %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td>
+                            <h5>Cart Total</h5>
+                          </td>
+                          <td>
+                            <h5>₹<%= cartTotal %>
+                            </h5>
+                          </td>
+                        </tr>
+
+                </tbody>
+              </table>
+              <div class="checkout_btn_inner float-right">
+                <!-- <a class="btn_1" href="/productpage">Continue Shopping</a> -->
+                <a class="btn_1 checkout_btn_1" href="/checkout">Proceed to checkout</a>
+              </div>
+            </div>
+            <% } %>
       </div>
   </section>
   <!--================End Cart Area =================-->
 
 
   <%-include('../user/layout/userfooter.ejs') -%>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  

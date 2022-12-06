@@ -460,10 +460,12 @@ module.exports = {
 
     addaddress: async (req, res) => {
         let userId = req.session.userId
+        const type = await categoryModel.find()
 
         if (req.session.userLogin) {
-            res.render("user/addaddress", { user: req.session.user, login: true });
+            res.render("user/addaddress", { user: req.session.user, login: true, type });
         } else {
+            
             res.render("user/addaddress", { login: false });
         }
     },
@@ -496,7 +498,7 @@ module.exports = {
                 }
             }).then(() => {
                 console.log("address added");
-                res.redirect("/profile")
+                res.redirect("back")
             })
         } else {
             const address = new addressModel({
@@ -515,10 +517,10 @@ module.exports = {
             });
             await address.save().then(() => {
                 console.log("address added");
-                res.redirect("/profile");
+                res.redirect("back");
 
             }).catch((err) => {
-                res.redirect("/profile");
+                res.redirect("back");
             })
         }
 
@@ -732,15 +734,7 @@ module.exports = {
 
             
 
-            // payment: async(req,res) => {
-            //     const userId = req.session.userId;
-            //     const cart = await cartModel.findOne({ userId });
-            //     const product = cart.products;
-            //     const cartTotal = cart.cartTotal;
-            //     const now = new Date()
-            //     const deliveryDate = now.setDate(now.getDate() +7)
-              
-            // }
+           
             
 
         

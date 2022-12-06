@@ -178,24 +178,24 @@
                         <td>
                           <% if (prod.status=='Order Confirmed' ){ %>
                             <button type="button" onclick="changeStatus('<%= prod.status %>','<%= order._id %>','<%=prod.productId._id %>')"
-                              class="btn btn-success">Order Confirmed</button>
+                              class="btn btn-success"style="width: 145px;">Order Confirmed</button>
 
                               <% }else if(prod.status=='Packed') { %>
                               <button type="button" onclick="changeStatus('<%= prod.status %>','<%= order._id %>','<%= prod.productId._id %>')"
-                                class="btn btn-primary">Packed</button>
+                                class="btn btn-primary"style="width: 145px;">Packed</button>
 
                                 <% }else if(prod.status=='Shipping') { %>
                                   <button type="button" onclick="changeStatus('<%= prod.status %>','<%= order._id %>','<%= prod.productId._id %>')"
-                                    class="btn btn-secondary">Shipping</button>
+                                    class="btn btn-secondary"style="width: 145px;">Shipping</button>
 
                                     <% }else if(prod.status=='Delivered') { %>
                                       <button type="button" onclick="changeStatus('<%= prod.status %>','<%= order._id %>','<%= prod.productId._id %>')"
-                                        class="btn btn-success">Delivered</button>
+                                        class="btn btn-warning"style="width: 145px;">Delivered</button>
                               
 
                                          <% }else{ %> <button
                                           type="button"
-                                          class="btn btn-danger"
+                                          class="btn btn-danger"style="width: 145px;"
                                         > Canceled
                                       </button>
                                       <% } %>
