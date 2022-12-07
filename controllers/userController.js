@@ -63,7 +63,7 @@ module.exports = {
             const products = await productModel.find().populate('type', 'categoryName').sort({date:-1}).limit(8)
 
 
-            res.render('user/home', { login: false, banners, user: "",products, type, userId });
+            res.render('user/home', { login: false, banners, user: "", products, type, userId });
         }
     },
 
@@ -178,8 +178,10 @@ module.exports = {
         const userId = req.session.userId
         const banners = await bannerModel.find({ update: true })
         const type = await categoryModel.find()
+        const products = await productModel.find().populate('type', 'categoryName').sort({date:-1}).limit(8)
 
-        res.render('user/home', { login: true, user: user.userName, type, banners, userId });
+
+        res.render('user/home', { login: true, user: user.userName, products, type, banners, userId });
 
     },
 
