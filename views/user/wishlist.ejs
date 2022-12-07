@@ -49,37 +49,15 @@
                
                   
                     <img src="/images/<%= product?.image %>" style="width: 200px; height: 200px;" alt="" />
-                  
-                
-                
-              </td>
+                  </td>
               <td>  <div class="media-body">
                 <p> <%= product?.productName %></p>
               </div></td>
               <td>
                 <h5> ₹<%= product?.price %></h5>
-              </td>
-            
-
-<!--              
+              </td>  
               <td>
-                <div class="product_count">
-                  <span class="input-number-decrement"> <i class="ti-angle-down"></i></span>
-                  <input class="input-number" type="text" value="1" min="0" max="10">
-                  <span class="input-number-increment"> <i class="ti-angle-up"></i></span>
-                </div>
-              </td> -->
-              <!-- <td>
-                <h5>   <%= product?.price %></h5>
-              </td> -->
-
-           
-              
-              <td>
-                <!-- <button type="submit" class="btn btn-primary"   style="width: 100px;">Remove</button>
-                <span>&#9825;</span>
-                 -->
-                 <!-- <i class="bi bi-heart-fill"></i> -->
+             
                  <form action="/removewishlistproduct/<%= product?._id %>" method="post">
                   
                    <button type="submit"  class="btn btn-outline-dark" style="width: 7rem;">Remove</button>
@@ -95,10 +73,7 @@
               <% }) %>
           </tbody>
         </table>
-        <!-- <div class="checkout_btn_inner float-right">
-          <a class="btn_1" href="productpage">Continue Shopping</a>
-          <a class="btn_1 checkout_btn_1" href="#">Add to cart</a>
-        </div> -->
+      
       </div>
 
       <% } %> 
