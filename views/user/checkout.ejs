@@ -28,7 +28,7 @@
             <div class="col-lg-8">
               <% if(address.length !=0){%>
                 <div class="m-4 row mb-4 border">
-                  <div class="col-4">
+                  <div class="col-4 mt-3">
                     <h5>Delivery Address</h5>
                   </div>
 
@@ -56,7 +56,7 @@
                     </p>
                   </div>
 
-                  <div class="col-2">
+                  <div class="col-2 mt-3">
                     <a onclick="showAllAddress()" href="#">Change</a>
                   </div>
                 </div>
@@ -66,7 +66,7 @@
                     <form action="/checkout" method="post">
                       <% address.forEach((addresses,index)=>{ %>
                         <div class="mt-4 p-4 border form-check">
-                          <input class="form-check-input" type="radio" value="<%=index%> <%= addresses._id %> "
+                          <input class="form-check-input" type="radio" value="<%= index %> "
                             name="index" id="flexRadioDefault1" />
                           <label for="">
                             <%=addresses.fullName %>
@@ -79,7 +79,7 @@
                         <% }) %>
 
                           <button type="submit"
-                            class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+                            class="btn btn-primary ms-2 rounded mt-3">
                             Delivery here
                           </button>
                     </form>

@@ -6,7 +6,7 @@ const wishlistModel = require('../models/wishlistModel');
 const cartModel = require('../models/cartModel');
 const categoryModel = require('../models/categoryModel');
 const { default: mongoose } = require('mongoose');
-const { checkout } = require('../routes/User');
+
 const addressModel = require('../models/addressModel')
 const orderModel = require('../models/orderModel')
 const Razorpay = require('razorpay');
@@ -52,15 +52,18 @@ module.exports = {
             const type = await categoryModel.find()
             const banners = await bannerModel.find({ update: true })
 
+            const products = await productModel.find().populate('type', 'categoryName').sort({date:-1}).limit(8)
 
-            res.render("user/home", { login: true, user: req.session.user, banners, type, userId })
+
+            res.render("user/home", { login: true, user: req.session.user, banners, products, type, userId })
         } else {
             const userId = req.session.userId
             const type = await categoryModel.find()
             const banners = await bannerModel.find({ update: true })
+            const products = await productModel.find().populate('type', 'categoryName').sort({date:-1}).limit(8)
 
 
-            res.render('user/home', { login: false, banners, user: "", type, userId });
+            res.render('user/home', { login: false, banners, user: "",products, type, userId });
         }
     },
 
@@ -498,7 +501,7 @@ module.exports = {
                 }
             }).then(() => {
                 console.log("address added");
-                res.redirect("back")
+                res.redirect("/profile")
             })
         } else {
             const address = new addressModel({
@@ -517,10 +520,10 @@ module.exports = {
             });
             await address.save().then(() => {
                 console.log("address added");
-                res.redirect("back");
+                res.redirect("/profile");
 
             }).catch((err) => {
-                res.redirect("back");
+                res.redirect("/profile");
             })
         }
 
@@ -546,6 +549,7 @@ module.exports = {
             if(!index) {
                 index = 0;
             }
+            console.log(index+"index");
             const userId = req.session.userId;
             const type = await categoryModel.find()
 

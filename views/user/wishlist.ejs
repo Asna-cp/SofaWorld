@@ -8,10 +8,11 @@
 <section class="breadcrumb breadcrumb_bg">
   <div class="container">
     <div class="row justify-content-center">
+      
       <div class="col-lg-8">
         <div class="breadcrumb_iner">
           <div class="breadcrumb_iner_item">
-            <h2>Wishlist Products</h2>
+            <h2>Wishlist</h2>
             <p>Home <span>-</span>Wishlist Products</p>
           </div>
         </div>
@@ -25,6 +26,7 @@
 <section class="cart_area padding_top">
   <div class="container">
     <div class="cart_inner">
+
       <% if (list.length == 0) { %> 
         <div class="col-12 text-center">
           <img src="https://ibellstore.com/images/no-item-found-here.png" alt="no order" style="width: 400px; height:300px ;">
@@ -35,7 +37,7 @@
           <thead>
             <tr>
               <th scope="col">Product</th>
-              <th>Product Name</th>
+              
               <th scope="col">Price</th>
              
               <th scope="col">Update</th>
@@ -46,39 +48,57 @@
             <% list.forEach(function(product){ %>
             <tr>
               <td>
-               
-                  
-                    <img src="/images/<%= product?.image %>" style="width: 200px; height: 200px;" alt="" />
-                  </td>
-              <td>  <div class="media-body">
-                <p> <%= product?.productName %></p>
-              </div></td>
+                <div class="media">
+                  <div class="d-flex">
+                    <img src="/images/<%= product?.image %>" class="d-md-block d-none" style="width: 200px;" alt="" />
+                    <img src="/images/<%= product?.image %>" class="d-md-none d-block" style="width: 100%;" alt="" />
+                  </div>
+                  <div class="media-body">
+                    <p><%= product?.productName %></p>
+                  </div>
+                </div>
+              </td>
               <td>
-                <h5> ₹<%= product?.price %></h5>
-              </td>  
+                <h5>₹<%= product?.price %></h5>
+              </td>
+
+
               <td>
              
-                 <form action="/removewishlistproduct/<%= product?._id %>" method="post">
-                  
-                   <button type="submit"  class="btn btn-outline-dark" style="width: 7rem;">Remove</button>
-                </form>
-                <br>
-                <form action="/wishlistaddcart/<%= product?._id %>" method="post">
-                  
-                  <button type="submit"  class="btn btn-outline-dark" >Add to cart</button>
+                <form action="/removewishlistproduct/<%= product?._id %>" method="post">
+                 
+                  <button type="submit"  class="btn btn-outline-danger " style="width: 7rem;">Remove</button>
                </form>
-                  
-              </td>
+               <br>
+               <form action="/wishlistaddcart/<%= product?._id %>" method="post">
+                 
+                 <button type="submit"  class="btn btn-outline-success" >Add to cart</button>
+              </form>
+                 
+             </td>
+
+           
+             
             </tr>
-              <% }) %>
+            <% }) %>
+        
+          
+            
           </tbody>
         </table>
       
       </div>
-
-      <% } %> 
     </div>
+    <% } %>
 </section>
 <!--================End Cart Area =================-->
 
 <%-include('../user/layout/userfooter.ejs') -%>
+
+
+
+
+
+
+
+
