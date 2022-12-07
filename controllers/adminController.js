@@ -12,19 +12,28 @@ const Razorpay = require('razorpay');
 
 
 
+
+
 module.exports = {
 
     //signin page
     signin: (req, res) => {
         res.render('admin/signin')
     },
-    adminhome: (req, res) => {
-        res.render('admin/Home')
+    adminhome: async (req, res) => {
+
+        const totalOrder = await orderModel.find({}).count()
+        const totalProducts = await ProductModel.find({}).count()
+        const totalCategory = await CategoryModel.find({}).count()
+        const  totalUser = await UserModel.find({}).count()
+        res.render('admin/Home',{ totalUser, totalProducts, totalOrder, totalCategory })
     },
 
 
     //login
     adminlogin: async (req, res) => {
+        //Admin Dashboard
+       
         const { email, password } = req.body;
         const admin = await AdminModel.findOne({ email });
         if (!admin) {
