@@ -234,11 +234,12 @@ module.exports = {
 
 
         prodt = req.params.id;
+        const type = await categoryModel.find()
         const userId = req.session.id
         const products = await productModel.findById({ _id: req.params.id }).populate('type')
 
 
-        res.render('user/productdetails', { login: true, user: req.session.user, products, userId })
+        res.render('user/productdetails', { login: true, user: req.session.user, products, userId, type })
     },
 
     wishListPage: async (req, res) => {

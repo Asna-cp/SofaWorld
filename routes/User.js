@@ -52,7 +52,7 @@ router.get('/order-success',controller.orderSuccess)
 
 //Order Management
 
-router.get('/Orderpage',controller.orderpage)
+router.get('/Orderpage',userSession.userSession,controller.orderpage)
 router.post('/cancelOrder/:proId/:orderId',controller.cancelOrder)
 
 router.get('/invoice',controller.Invoice)
