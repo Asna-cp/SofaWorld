@@ -52,7 +52,7 @@ module.exports = {
             const type = await categoryModel.find()
             const banners = await bannerModel.find({ update: true })
 
-            const products = await productModel.find().populate('type', 'categoryName').sort({date:-1}).limit(8)
+            const products = await productModel.find().populate('type', 'categoryName').sort({ date: -1 }).limit(8)
 
 
             res.render("user/home", { login: true, user: req.session.user, banners, products, type, userId })
@@ -60,7 +60,7 @@ module.exports = {
             const userId = req.session.userId
             const type = await categoryModel.find()
             const banners = await bannerModel.find({ update: true })
-            const products = await productModel.find().populate('type', 'categoryName').sort({date:-1}).limit(8)
+            const products = await productModel.find().populate('type', 'categoryName').sort({ date: -1 }).limit(8)
 
 
             res.render('user/home', { login: false, banners, user: "", products, type, userId });
@@ -178,7 +178,7 @@ module.exports = {
         const userId = req.session.userId
         const banners = await bannerModel.find({ update: true })
         const type = await categoryModel.find()
-        const products = await productModel.find().populate('type', 'categoryName').sort({date:-1}).limit(8)
+        const products = await productModel.find().populate('type', 'categoryName').sort({ date: -1 }).limit(8)
 
 
         res.render('user/home', { login: true, user: user.userName, products, type, banners, userId });
@@ -202,8 +202,8 @@ module.exports = {
             const userId = req.session.userId;
             const type = await categoryModel.find()
 
-            
-            
+
+
             let list = await wishlistModel.findOne({ userId }).populate('productIds')
             if (list != null) {
                 list = list.productIds
@@ -211,8 +211,8 @@ module.exports = {
             else {
                 list = []
             }
-            
-            res.render('user/productpage', { login: true, user: req.session.user, products, userId, list,type })
+
+            res.render('user/productpage', { login: true, user: req.session.user, products, userId, list, type })
         } else {
             const type = await categoryModel.find()
             const userId = req.session.userId;
@@ -225,7 +225,7 @@ module.exports = {
                 list = []
             }
 
-            res.render('user/productpage', { login: false, products,list, type })
+            res.render('user/productpage', { login: false, products, list, type })
         }
 
     },
@@ -260,7 +260,7 @@ module.exports = {
             }
             resolve(list)
         }).then((list) => {
-            res.render('user/wishlist', { login: true, user: req.session.user, list ,type})
+            res.render('user/wishlist', { login: true, user: req.session.user, list, type })
         })
     },
 
@@ -269,7 +269,7 @@ module.exports = {
     addtowishlist: async (req, res) => {
         let productId = req.params.productId
         let userId = req.session.userId  //user id
-        
+
         let wishlist = await wishlistModel.findOne({ userId })
         if (wishlist) {
             await wishlistModel.findOneAndUpdate({ userId: userId }, { $addToSet: { productIds: productId } })
@@ -309,10 +309,10 @@ module.exports = {
             const cartTotal = cartlist.cartTotal
             // console.log("cart id" + cart);
             if (req.session.userLogin) {
-                res.render('user/cart', { login: true, user: req.session.user, cart, cartlist, cartTotal,type })
+                res.render('user/cart', { login: true, user: req.session.user, cart, cartlist, cartTotal, type })
             }
         } else {
-            res.render('user/cart', { login: false, cart: [], cartlist, cartTotal,type })
+            res.render('user/cart', { login: true, user: req.session.user, cart, cartlist, cartTotal, type })
         }
     },
 
@@ -345,7 +345,7 @@ module.exports = {
 
     removecartproduct: async (req, res) => {
         const userId = req.session.userId;
-       
+
         const productId = req.params.id;
         const price = req.params.price
         const quantity = req.params.quantity
@@ -424,7 +424,7 @@ module.exports = {
         }
     },
 
-   
+
 
 
     profile: async (req, res) => {
@@ -435,8 +435,8 @@ module.exports = {
         // let brand = await brandModel.find();
         let users = await UserModel.findOne({ _id: userId });
         let address = await addressModel.findOne({ userId: userId })
-    
-        
+
+
 
         if (address) {
             let address3 = address.address;
@@ -455,7 +455,7 @@ module.exports = {
         } else {
 
             if (req.session.userLogin) {
-                res.render("user/profile", { user: req.session.user,users, address, login: true, type });
+                res.render("user/profile", { user: req.session.user, users, address, login: true, type });
             } else {
                 res.redirect('/loginpage')
             }
@@ -471,7 +471,7 @@ module.exports = {
         if (req.session.userLogin) {
             res.render("user/addaddress", { user: req.session.user, login: true, type });
         } else {
-            
+
             res.render("user/addaddress", { login: false });
         }
     },
@@ -544,15 +544,15 @@ module.exports = {
 
     },
 
-     //Place Order
+    //Place Order
 
-     checkout: async (req,res) => {
-        try{
+    checkout: async (req, res) => {
+        try {
             let index = Number(req.body.index);
-            if(!index) {
+            if (!index) {
                 index = 0;
             }
-            console.log(index+"index");
+            console.log(index + "index");
             const userId = req.session.userId;
             const type = await categoryModel.find()
 
@@ -566,187 +566,188 @@ module.exports = {
             }
             const cartItems = await cartModel.findOne({ userId });
             if (cartItems) {
-                res.render("user/checkout", {  login: true, user: req.session.user,address,index,cartItems,type });
+                res.render("user/checkout", { login: true, user: req.session.user, address, index, cartItems, type });
 
-            }else{
+            } else {
                 res.redirect("/login");
             }
-         } catch {
-                res.json("something wrong please try again");
-            }
-          
-                
-            },
-            
-            //order confirm
-            orderconfirm: async (req,res) =>{
-                try {
-                
-                    const paymentMethod = req.query.paymentMethod;
-                    const userId = req.session.userId;
-                    const indexof = parseInt(req.query.index);
-                    const addresses = await addressModel.findOne({userId });
-                    const address = addresses.address[indexof];
-                    const cart = await cartModel.findOne({ userId });
-                    const productIds = cart.productIds;
-                    const grandTotal = cart.cartTotal;
-                    let addOrder;
-                    
-                    if (paymentMethod === "COD" ) {
-                        addOrder = await orderModel({
-                            userId,
-                            productIds,
-                            address,
-                            grandTotal,
-                            paymentMethod,
-                          });
-                          addOrder.save();
-                          await cartModel.findOneAndDelete({ userId });
-                          res.json({ payment: "COD" });
-                        } else {
-                          var instance = new Razorpay({
-                            key_id: "rzp_test_r9TZHeiPcGzoLA",
-                            key_secret: "aqfxB6ew0ezASZJMXmhs0bS3",
-                          });
-                          const options = {
-                            amount: grandTotal ,
-                            currency: "INR",
-                          };
-                          instance.orders.create(options, (err, order) => {
-                            if (err) {
-                              console.log(err);
-                            } else {
-                              res.json(order);
-                            }
-                          });
-                        }
-                      } catch (err) {
-                      
-                        res.json("Something wrong, please try again");
-                      }
-                    },
-                    
+        } catch {
+            res.json("something wrong please try again");
+        }
 
-     //payment verification
+
+    },
+
+    //order confirm
+    orderconfirm: async (req, res) => {
+        try {
+
+            const paymentMethod = req.query.paymentMethod;
+            const userId = req.session.userId;
+            const indexof = parseInt(req.query.index);
+            const addresses = await addressModel.findOne({ userId });
+            const address = addresses.address[indexof];
+            const cart = await cartModel.findOne({ userId });
+            const productIds = cart.productIds;
+            const grandTotal = cart.cartTotal;
+            let addOrder;
+
+            if (paymentMethod === "COD") {
+                addOrder = await orderModel({
+                    userId,
+                    productIds,
+                    address,
+                    grandTotal,
+                    paymentMethod,
+                });
+                addOrder.save();
+                await cartModel.findOneAndDelete({ userId });
+                res.json({ payment: "COD" });
+            } else {
+                var instance = new Razorpay({
+                    key_id: "rzp_test_r9TZHeiPcGzoLA",
+                    key_secret: "aqfxB6ew0ezASZJMXmhs0bS3",
+                });
+                const options = {
+                    amount: grandTotal,
+                    currency: "INR",
+                };
+                instance.orders.create(options, (err, order) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        res.json(order);
+                    }
+                });
+            }
+        } catch (err) {
+
+            res.json("Something wrong, please try again");
+        }
+    },
+
+
+    //payment verification
 
     payment: async (req, res) => {
-            try {
+        try {
 
-      const index = parseInt(req.body.index);
-      const userId = req.session.userId;
-      const addresses = await addressModel.findOne({ userId });
-      const address = addresses.address[index];
-      const cart = await cartModel.findOne({ userId });
-      const productIds = cart.productIds;
-      const grandTotal = cart.cartTotal;
-      const crypto = require("crypto");
-      let hmac = crypto.createHmac("sha256", "aqfxB6ew0ezASZJMXmhs0bS3");
-      hmac.update(
-        req.body.payment.razorpay_order_id +
-          "|" +
-          req.body.payment.razorpay_payment_id
-      );
-      hmac = hmac.digest("hex");
-      if (hmac == req.body.payment.razorpay_signature) {
-        const addOrder = await orderModel({
-          userId,
-          productIds,
-          address,
-          grandTotal,
-          paymentMethod: "Razorpay",
-          payment: "paid",
-        });
-        addOrder.save();
-        await cartModel.findOneAndDelete({ userId });
-        response = { valid: true };
-        res.json(response);
-      }else{
-        alert("Sorry ,try again")
-      }
-    } catch {
-      res.json("Something wrong, please try again");
-    }
-  },
+            const index = parseInt(req.body.index);
+            const userId = req.session.userId;
+            const addresses = await addressModel.findOne({ userId });
+            const address = addresses.address[index];
+            const cart = await cartModel.findOne({ userId });
+            const productIds = cart.productIds;
+            const grandTotal = cart.cartTotal;
+            const crypto = require("crypto");
+            let hmac = crypto.createHmac("sha256", "aqfxB6ew0ezASZJMXmhs0bS3");
+            hmac.update(
+                req.body.payment.razorpay_order_id +
+                "|" +
+                req.body.payment.razorpay_payment_id
+            );
+            hmac = hmac.digest("hex");
+            if (hmac == req.body.payment.razorpay_signature) {
+                const addOrder = await orderModel({
+                    userId,
+                    productIds,
+                    address,
+                    grandTotal,
+                    paymentMethod: "Razorpay",
+                    payment: "paid",
+                });
+                addOrder.save();
+                await cartModel.findOneAndDelete({ userId });
+                response = { valid: true };
+                res.json(response);
+            } else {
+                alert("Sorry ,try again")
+            }
+        } catch {
+            res.json("Something wrong, please try again");
+        }
+    },
 
-  orderSuccess: async (req, res) => {
-    const type = await categoryModel.find()
-
-
-    res.render("user/orderSuccess", { login: req.session.login,type });
-  },
-
-  //view Orders
-
-  orderpage: async (req,res) => {
-    try {
-
-        //expected Date
-        const now = new Date();
-        const expected_delivery_date = now.setDate(now.getDate() + 7);
-
-        const userId = req.session.userId;
+    orderSuccess: async (req, res) => {
         const type = await categoryModel.find()
 
-       
 
-        const orders = await orderModel.find({ userId })
-        .populate("productIds.productId")
-       
+        res.render("user/orderSuccess", { login: req.session.login, type });
+    },
 
-        res.render('user/Orderpage',{ login: req.session.login, orders, moment,  expected_delivery_date,type })
+    //view Orders
 
-    } catch (err) {
-        console.log(err);
-        res.json("please try again");
-    }
+    orderpage: async (req, res) => {
+        try {
+
+            //expected Date
+            const now = new Date();
+            const expected_delivery_date = now.setDate(now.getDate() + 7);
+
+            const userId = req.session.userId;
+            const type = await categoryModel.find()
+
+
+
+            const orders = await orderModel.find({ userId })
+                .populate("productIds.productId")
+
+             if (req.session.userLogin) {
+
+            res.render('user/Orderpage', { user: req.session.user, login: true, orders, moment, expected_delivery_date, type })
+            }
+        } catch (err) {
+            console.log(err);
+            res.json("please try again");
+        }
     },
 
     cancelOrder: async (req, res) => {
-        
-            const itemId = req.params.proId;
-            const orderId = req.params.orderId;
-            let canceled_date = new Date();
-            await orderModel.updateOne(
-              { _id: orderId, "productIds.productId": itemId },
-              {
+
+        const itemId = req.params.proId;
+        const orderId = req.params.orderId;
+        let canceled_date = new Date();
+        await orderModel.updateOne(
+            { _id: orderId, "productIds.productId": itemId },
+            {
                 $set: {
-                  canceled_date,
-                 
-                  "productIds.$.status": "Canceled",
+                    canceled_date,
+
+                    "productIds.$.status": "Canceled",
                 },
-              }
-            );
-            res.redirect("/Orderpage");
-          
-            },
+            }
+        );
+        res.redirect("/Orderpage");
+
+    },
 
 
-            //INVOICE
+    //INVOICE
 
-            Invoice: async( req,res) => {
-                const orderId = req.params.orderId;
-                const order = await orderModel.findOne({ orderId })
-                .populate("productIds.productId")
-            
-                const products = order.productIds;
-                const address = order.address;
-                res.render('user/invoice',{  login: req.session.login, order, products, address, moment });
+    Invoice: async (req, res) => {
+        const orderId = req.params.orderId;
+        const order = await orderModel.findOne({ orderId })
+            .populate("productIds.productId")
 
-            },                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-       
+        const products = order.productIds;
+        const address = order.address;
+        res.render('user/invoice', { login: req.session.login, order, products, address, moment });
+
+    },
+
 
 }
-                  
-    
 
-            
 
-           
-            
 
-        
 
-   
+
+
+
+
+
+
+
 
 
 
