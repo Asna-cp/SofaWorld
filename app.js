@@ -8,23 +8,15 @@ const adminRoute = require('./routes/Admin')
 const multer = require('multer')
 const nodemailer = require('nodemailer');
 const { createBrotliCompress } = require('zlib');
-
-
-
 const app = express()
 
 // set view engine
 app.set('views', path.join(__dirname, '/views'))
 app.set('view engine', 'ejs');
-
 app.use(express.static(path.join(__dirname, 'public')))
-
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-
 
 //Multer (file upload)
 const storage = multer.diskStorage({
@@ -36,10 +28,7 @@ const storage = multer.diskStorage({
         console.log(file.fieldname + Date.now() + path.extname(file.originalname));
     },
 });
-
-//const upload = multer({storage: storage})
 app.use(multer({ storage: storage }).single("image"))
-
 
 //session
 const oneDay = 1000 * 60 * 60 * 24;
@@ -55,10 +44,6 @@ app.use((req, res, next) => {
     res.set("cache-control", "private,no-store,must-revalidate");
     next();
 })
-
-
-
-
 
 // USER ROUTE
 app.use("/", userRoute);

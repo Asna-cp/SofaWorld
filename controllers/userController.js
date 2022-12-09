@@ -6,28 +6,22 @@ const wishlistModel = require('../models/wishlistModel');
 const cartModel = require('../models/cartModel');
 const categoryModel = require('../models/categoryModel');
 const { default: mongoose } = require('mongoose');
-
 const addressModel = require('../models/addressModel')
 const orderModel = require('../models/orderModel')
 const Razorpay = require('razorpay');
 const moment = require("moment");
 
 //Email otp
-
-
 var FullName;
 var UserName;
 var PhoneNumber;
 var Email;
 var Password;
-
-
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
     secure: true,
     service: 'Gmail',
-
     auth: {
         user: 'projectsofa22@gmail.com',
         pass: 'zejkjbknophwryvz',
@@ -38,9 +32,7 @@ var otp = Math.random();
 otp = otp * 1000000;
 otp = parseInt(otp);
 console.log(otp);
-
 module.exports = {
-
 
     // HOME PAGE
     home: async (req, res) => {
@@ -48,21 +40,15 @@ module.exports = {
         //res.send("you just created  a user ")
         if (req.session.userLogin) {
             const userId = req.session.userId
-
             const type = await categoryModel.find()
             const banners = await bannerModel.find({ update: true })
-
             const products = await productModel.find().populate('type', 'categoryName').sort({ date: -1 }).limit(8)
-
-
             res.render("user/home", { login: true, user: req.session.user, banners, products, type, userId })
         } else {
             const userId = req.session.userId
             const type = await categoryModel.find()
             const banners = await bannerModel.find({ update: true })
             const products = await productModel.find().populate('type', 'categoryName').sort({ date: -1 }).limit(8)
-
-
             res.render('user/home', { login: false, banners, user: "", products, type, userId });
         }
     },
@@ -72,19 +58,14 @@ module.exports = {
         res.render('user/signin')
     },
 
-    //Otp
-
+    //OTP
     otp: async (req, res) => {
-
         FullName = req.body.fullName
         UserName = req.body.userName
         PhoneNumber = req.body.phoneNumber
         Email = req.body.email
         Password = req.body.password
-
-
         const user = await UserModel.findOne({ email: Email })
-
         if (!user) {
             // send mail with defined transport object
             var mailOptions = {
@@ -92,14 +73,12 @@ module.exports = {
                 subject: "Otp for registration is: ",
                 html: "<h3>OTP for account verification is </h3>" + "<h1 style='font-weight:bold;'>" + otp + "</h1>" // html body
             };
-
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
                     return console.log(error);
                 }
                 console.log('Message sent: %s', info.messageId);
                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-
                 res.render('user/email');
             });
         }
@@ -107,14 +86,12 @@ module.exports = {
             res.redirect('/loginpage')
         }
     },
-
     resendotp: (req, res) => {
         var mailOptions = {
             to: email,
             subject: "Otp for registration is: ",
             html: "<h3>OTP for account verification is </h3>" + "<h1 style='font-weight:bold;'>" + otp + "</h1>" // html body
         };
-
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 return console.log(error);
@@ -124,8 +101,6 @@ module.exports = {
             res.render('otp', { msg: "otp has been sent" });
         });
     },
-
-
     verifyotp: (req, res) => {
         if (req.body.otp == otp) {
             const newUser = UserModel({
@@ -135,8 +110,6 @@ module.exports = {
                 phoneNumber: PhoneNumber,
                 password: Password
             });
-
-            console.log(req.body);
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(newUser.password, salt, (err, hash) => {
                     if (err) throw err;
@@ -166,7 +139,6 @@ module.exports = {
         if (!user) {
             return res.redirect('/loginpage');
         }
-
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.redirect('/loginpage');
@@ -179,31 +151,20 @@ module.exports = {
         const banners = await bannerModel.find({ update: true })
         const type = await categoryModel.find()
         const products = await productModel.find().populate('type', 'categoryName').sort({ date: -1 }).limit(8)
-
-
         res.render('user/home', { login: true, user: user.userName, products, type, banners, userId });
-
     },
-
     logout: (req, res) => {
         req.session.loggedOut = true;
         req.session.destroy();
         res.redirect('/');
     },
 
-
-
     //view the products in productpage
-
     productpage: async (req, res) => {
-
         if (req.session.userLogin) {
             const products = await productModel.find({}).populate('type', 'categoryName').lean()
             const userId = req.session.userId;
             const type = await categoryModel.find()
-
-
-
             let list = await wishlistModel.findOne({ userId }).populate('productIds')
             if (list != null) {
                 list = list.productIds
@@ -211,7 +172,6 @@ module.exports = {
             else {
                 list = []
             }
-
             res.render('user/productpage', { login: true, user: req.session.user, products, userId, list, type })
         } else {
             const type = await categoryModel.find()
@@ -224,29 +184,21 @@ module.exports = {
             else {
                 list = []
             }
-
             res.render('user/productpage', { login: false, products, list, type })
         }
-
     },
 
     productdetails: async (req, res) => {
-
-
         prodt = req.params.id;
         const type = await categoryModel.find()
         const userId = req.session.id
         const products = await productModel.findById({ _id: req.params.id }).populate('type')
-
-
         res.render('user/productdetails', { login: true, user: req.session.user, products, userId, type })
     },
 
     wishListPage: async (req, res) => {
-
         const userId = req.session.userId;
         const type = await categoryModel.find()
-
         return new Promise(async (resolve, reject) => {
             let list = await wishlistModel.findOne({ userId: userId }).populate('productIds')
             if (list != null) {
@@ -254,8 +206,6 @@ module.exports = {
             }
             else {
                 const type = await categoryModel.find()
-
-
                 list = []
             }
             resolve(list)
@@ -265,11 +215,9 @@ module.exports = {
     },
 
     //Add to Wishlist
-
     addtowishlist: async (req, res) => {
         let productId = req.params.productId
         let userId = req.session.userId  //user id
-
         let wishlist = await wishlistModel.findOne({ userId })
         if (wishlist) {
             await wishlistModel.findOneAndUpdate({ userId: userId }, { $addToSet: { productIds: productId } })
@@ -284,7 +232,6 @@ module.exports = {
         }
     },
 
-
     removewishlistproduct: async (req, res) => {
         const id = req.params.id;
         let userId = req.session.userId;
@@ -295,27 +242,24 @@ module.exports = {
     },
 
     // Cart products
-
     cart: async (req, res) => {
-
         const userId = req.session.userId;
         let cartTotal = null;
         const type = await categoryModel.find()
-
         const cartlist = await cartModel.findOne({ userId }).populate("productIds.productId");
-
+        let cart;
         if (cartlist != null) {
-            const cart = cartlist.productIds
+            cart = cartlist.productIds
             const cartTotal = cartlist.cartTotal
             // console.log("cart id" + cart);
             if (req.session.userLogin) {
                 res.render('user/cart', { login: true, user: req.session.user, cart, cartlist, cartTotal, type })
             }
         } else {
+            cart = [];
             res.render('user/cart', { login: true, user: req.session.user, cart, cartlist, cartTotal, type })
         }
     },
-
 
     addtocart: async (req, res) => {
         let productId = req.params.proId
@@ -323,7 +267,6 @@ module.exports = {
         let cart = await cartModel.findOne({ userId: userId })
         const product = await productModel.findOne({ _id: productId })
         const total = product.price
-
         if (cart) {
             const exist = await cartModel.findOne({ userId, 'productIds.productId': productId })
             if (exist != null) {
@@ -345,20 +288,15 @@ module.exports = {
 
     removecartproduct: async (req, res) => {
         const userId = req.session.userId;
-
         const productId = req.params.id;
         const price = req.params.price
         const quantity = req.params.quantity
         const product = await productModel.findOne({ _id: productId })
         const amt = price * quantity
-
         await cartModel.findOneAndUpdate({ userId: userId }, { $pull: { productIds: { productId: productId } }, $inc: { cartTotal: -amt } });
         res.redirect("back");
-
-
     },
     quantityIncrement: async (req, res) => {
-
         let userId = req.session.userId;
         let productId = req.params.id;
         let product = await productModel.findOne({ _id: productId })
@@ -383,22 +321,15 @@ module.exports = {
             }
         })
         res.redirect("back")
-
     },
 
-
     categorylisting: async (req, res) => {
-
         const id = req.params.id
         const products = await productModel.find({ type: id }).populate('type', 'categoryName').lean()
         const userId = req.session.id
         const type = await categoryModel.find()
-
-
         res.render('user/category', { login: true, user: req.session.user, products, userId, type })
     },
-
-
 
     wishlistaddcart: async (req, res) => {
         let productId = req.params.id
@@ -424,23 +355,13 @@ module.exports = {
         }
     },
 
-
-
-
     profile: async (req, res) => {
         let userId = req.session.userId;
         const type = await categoryModel.find()
-
-
-        // let brand = await brandModel.find();
         let users = await UserModel.findOne({ _id: userId });
         let address = await addressModel.findOne({ userId: userId })
-
-
-
         if (address) {
             let address3 = address.address;
-
             res.render("user/profile", {
                 user: req.session.user,
                 users,
@@ -462,12 +383,9 @@ module.exports = {
         }
     },
 
-
-
     addaddress: async (req, res) => {
         let userId = req.session.userId
         const type = await categoryModel.find()
-
         if (req.session.userLogin) {
             res.render("user/addaddress", { user: req.session.user, login: true, type });
         } else {
@@ -475,6 +393,7 @@ module.exports = {
             res.render("user/addaddress", { login: false });
         }
     },
+
     newaddress: async (req, res) => {
         const {
             fullName,
@@ -487,7 +406,6 @@ module.exports = {
         // let UserData = req.session.user;
         let userId = req.session.userId;
         let exist = await addressModel.findOne({ userId: userId })
-
         if (exist) {
             await addressModel.findOneAndUpdate({
                 userId: userId
@@ -531,6 +449,7 @@ module.exports = {
         }
 
     },
+
     deleteAddress: async (req, res) => {
         let userId = req.session.userId;
         let addressId = req.params.id
@@ -545,7 +464,6 @@ module.exports = {
     },
 
     //Place Order
-
     checkout: async (req, res) => {
         try {
             let index = Number(req.body.index);
@@ -555,8 +473,6 @@ module.exports = {
             console.log(index + "index");
             const userId = req.session.userId;
             const type = await categoryModel.find()
-
-
             const addresses = await addressModel.findOne({ userId });
             let address;
             if (addresses) {
@@ -574,14 +490,11 @@ module.exports = {
         } catch {
             res.json("something wrong please try again");
         }
-
-
     },
 
     //order confirm
     orderconfirm: async (req, res) => {
         try {
-
             const paymentMethod = req.query.paymentMethod;
             const userId = req.session.userId;
             const indexof = parseInt(req.query.index);
@@ -591,7 +504,6 @@ module.exports = {
             const productIds = cart.productIds;
             const grandTotal = cart.cartTotal;
             let addOrder;
-
             if (paymentMethod === "COD") {
                 addOrder = await orderModel({
                     userId,
@@ -626,12 +538,9 @@ module.exports = {
         }
     },
 
-
     //payment verification
-
     payment: async (req, res) => {
         try {
-
             const index = parseInt(req.body.index);
             const userId = req.session.userId;
             const addresses = await addressModel.findOne({ userId });
@@ -670,31 +579,21 @@ module.exports = {
 
     orderSuccess: async (req, res) => {
         const type = await categoryModel.find()
-
-
         res.render("user/orderSuccess", { login: req.session.login, type });
     },
 
     //view Orders
-
     orderpage: async (req, res) => {
         try {
-
             //expected Date
             const now = new Date();
             const expected_delivery_date = now.setDate(now.getDate() + 7);
-
             const userId = req.session.userId;
             const type = await categoryModel.find()
-
-
-
             const orders = await orderModel.find({ userId })
                 .populate("productIds.productId")
-
-             if (req.session.userLogin) {
-
-            res.render('user/Orderpage', { user: req.session.user, login: true, orders, moment, expected_delivery_date, type })
+            if (req.session.userLogin) {
+                res.render('user/Orderpage', { user: req.session.user, login: true, orders, moment, expected_delivery_date, type })
             }
         } catch (err) {
             console.log(err);
@@ -703,7 +602,6 @@ module.exports = {
     },
 
     cancelOrder: async (req, res) => {
-
         const itemId = req.params.proId;
         const orderId = req.params.orderId;
         let canceled_date = new Date();
@@ -718,24 +616,17 @@ module.exports = {
             }
         );
         res.redirect("/Orderpage");
-
     },
 
-
     //INVOICE
-
     Invoice: async (req, res) => {
         const orderId = req.params.orderId;
         const order = await orderModel.findOne({ orderId })
             .populate("productIds.productId")
-
         const products = order.productIds;
         const address = order.address;
         res.render('user/invoice', { login: req.session.login, order, products, address, moment });
-
     },
-
-
 }
 
 

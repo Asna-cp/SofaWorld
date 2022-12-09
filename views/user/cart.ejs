@@ -1,9 +1,4 @@
 <%-include('../user/layout/userheader.ejs') -%>
-
-
-
-  <!--================Home Banner Area =================-->
-  <!-- breadcrumb start-->
   <section class="breadcrumb breadcrumb_bg">
     <div class="container">
       <div class="row justify-content-center">
@@ -18,13 +13,18 @@
       </div>
     </div>
   </section>
-  <!-- breadcrumb start-->
-
   <!--================Cart Area =================-->
   <section class="cart_area padding_top">
     <div class="container">
       <div class="cart_inner">
+        <% if(cart.length == 0){ %>
+					
+          <div class="col-12 text-center">
+            <img src="https://ibellstore.com/images/no-item-found-here.png" alt="no order" style="width: 400px; height:300px ;">
+          </div>
+          <% }else{ %> 
         <div class="table-responsive">
+          
           <table class="table">
             <thead>
               <tr>
@@ -37,7 +37,6 @@
             </thead>
             <tbody>
               <% cart.forEach(function(product){ %>
-
               <tr>
                 <td>
                   <div class="media">
@@ -58,7 +57,6 @@
                       <a class="qty-down" href="/button-decrement/<%= product.productId?._id %>">
                       <i class="ti-angle-down"></i></a>
                     </span>
-
                     <input class="input-number" id="itemQty-<%= product.productId?.id %>" type="text" value="<%= product.quantity %>" min="0" max="10">
                     <span class="input-number-increment">
                       <a class="qty-up" href="/button-increment/<%=product.productId?._id %>">
@@ -78,7 +76,7 @@
                   </form>
                 </td>
               </tr>
-          
+              <% }) %>
               <tr>
                 <td></td>
                 <td></td>
@@ -89,21 +87,18 @@
                 <td>
                   <h5>₹<%= cartTotal %></h5>
                 </td>
-                
               </tr>
-              <% }) %>
             </tbody>
           </table>
           <div class="checkout_btn_inner float-right">
-            <!-- <a class="btn_1" href="#">Continue Shopping</a> -->
             <a class="btn_1 checkout_btn_1" href="/checkout">Proceed to checkout</a>
+
           </div>
         </div>
+        <%}%>
       </div>
   </section>
   <!--================End Cart Area =================-->
-
-
   <%-include('../user/layout/userfooter.ejs') -%>
 
 

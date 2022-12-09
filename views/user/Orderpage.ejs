@@ -1,12 +1,4 @@
-
-
-
 <%-include('../user/layout/userheader.ejs') -%>
-
-  
-
-<!--================Home Banner Area =================-->
-<!-- breadcrumb start-->
 <section class="breadcrumb breadcrumb_bg">
  <div class="container">
    <div class="row justify-content-center">
@@ -21,21 +13,15 @@
    </div>
  </div>
 </section>
-<!-- breadcrumb start-->
-
 <!--================Cart Area =================-->
 <section class="cart_area padding_top">
   <div class="container">
     <div class="cart_inner">
-
-      
       <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
               <th scope="col">Product</th>
-          
-
              <th scope="col">Price</th>
              <th scope="col" class="text-center">Quantity</th>
              <th scope="col">Total</th>
@@ -43,7 +29,6 @@
              <th scope="col">Expected Date</th>
              <th scope="col">Update</th>
              <th scope="col">Invoice</th>
-             
             </tr>
           </thead>
           <tbody>
@@ -77,32 +62,22 @@
               <td class="text-center">
                 <h5><%=  moment(expected_delivery_date).format('llll') %></h5>
               </td>
-
-              <td> 
-                  
+              <td>   
                 <form action="/cancelOrder/<%= prod.productId?._id %>/<%= order._id %>" method="post">
-                 
                <button type="submit"  class="btn btn-outline-dark">Cancel</button>
             </form>
            </td>
-
            <td> 
-            <a class="btn btn-outline-dark" href="/invoice">Invoice</a>
-           
+            <a class="btn btn-outline-dark" href="/invoice">Invoice</a> 
      </td>
         </tr>
-
           <% }}) %>
         </tbody>
         </table>
-       
       </div>
     </div>
-
 </section>
 <!--================End Cart Area =================-->
-
-
 <%-include('../user/layout/userfooter.ejs') -%>
 
 
