@@ -23,8 +23,8 @@ let transporter = nodemailer.createTransport({
     secure: true,
     service: 'Gmail',
     auth: {
-        user: 'projectsofa22@gmail.com',
-        pass: 'zejkjbknophwryvz',
+        user: 'firstproject37@gmail.com',
+        pass: process.env.email_Pass,
     }
 });
 
@@ -503,6 +503,7 @@ module.exports = {
             const cart = await cartModel.findOne({ userId });
             const productIds = cart.productIds;
             const grandTotal = cart.cartTotal;
+            console.log(grandTotal);
             let addOrder;
             if (paymentMethod === "COD") {
                 addOrder = await orderModel({
@@ -628,7 +629,6 @@ module.exports = {
         res.render('user/invoice', { login: req.session.login, order, products, address, moment });
     },
 }
-
 
 
 

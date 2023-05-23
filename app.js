@@ -1,3 +1,4 @@
+require("dotenv").config()
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
@@ -50,25 +51,6 @@ app.use("/", userRoute);
 
 // ADMIN ROUTE
 app.use("/admin", adminRoute);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Start Server
 app.listen(3000, () => {
     console.log('Server Started')

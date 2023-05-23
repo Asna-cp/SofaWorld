@@ -57,15 +57,9 @@ router.post('/cancelOrder/:proId/:orderId',controller.cancelOrder)
 
 router.get('/invoice',controller.Invoice)
 
-
-
-
-
-
 //Email otp verification
 
 // router.get('/loginpage',controller.email)
-
 
 
 // POST METHOD
@@ -77,7 +71,5 @@ router.post('/home', controller.home)
 router.post('/send', controller.otp)
 
 router.post('/verify', controller.verifyotp)
-
-
 
 module.exports = router

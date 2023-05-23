@@ -110,7 +110,6 @@ module.exports = {
 
     addcategory: async (req, res) => {
         const newCategory = CategoryModel(req.body);
-        console.log("hello")
         console.log(req.body)
         try {
             await newCategory.save()
